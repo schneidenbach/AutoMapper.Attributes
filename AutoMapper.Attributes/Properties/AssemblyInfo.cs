@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AutoMapper.Attributes")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A convenient way to create AutoMapper type mappings using attributes.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Spencer Schneidenbach")]
 [assembly: AssemblyProduct("AutoMapper.Attributes")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
