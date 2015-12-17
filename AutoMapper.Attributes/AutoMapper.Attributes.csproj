@@ -47,8 +47,13 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Mapptribute.cs" />
     <Compile Include="MapsFromAttribute.cs" />
+    <Compile Include="MapsPropertyAttribute.cs" />
+    <Compile Include="MapsFromPropertyAttribute.cs" />
+    <Compile Include="MapsToPropertyAttribute.cs" />
     <Compile Include="MapsToAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyMapInfo.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
