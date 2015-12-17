@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace AutoMapper.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public abstract class MapsPropertyAttribute : Attribute
     {
         internal MapsPropertyAttribute() {}

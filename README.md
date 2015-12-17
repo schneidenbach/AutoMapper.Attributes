@@ -33,14 +33,101 @@ A convenient way to create AutoMapper type mappings using attributes.
 		{
 			public string FirstName { get; set; }
 			public string LastName { get; set; }
-			public string CustomerNotes { get; set; }
+			public string MyCustomerNotes { get; set; }
 		}
 	}
 
-### Why? ###
-AutoMapper is awesome.  However, in order to use it you have to call `Mapper.CreateMap()` for every two types you want to map.  This makes it a bit easier and cleaner for my use cases.
+### Custom property mapping
 
-### Ok, but I need some custom mapping behavior. ###
+There are two attributes - `[MapsFromProperty]` and `[MapsToProperty]`.  Both take a type and a name of a property you want to map from/to.  These attributes even support nested property mapping using normal dot notation.
+
+	[MapsFromProperty(typeof(SourceType), "Address.City")]
+
+Examples below:
+
+#### MapsToProperty example
+
+`[MapsToProperty]` allows you to designate a source type's property as mapping to a destination type's property.  Simply: 
+
+1. Define your source class (in this example, Person)
+2. Define your destination class (in this example, Customer)
+2. Define your source class properties
+3. Add the `[MapsToProperty]` to the property that you want to map to the destination property.  In this case, the attribute's arguments are the destination type and the name of the destination type's property.
+
+##### Sample
+
+	public class Program
+	{
+		public void Main()
+		{
+			typeof(Program).Assembly.MapTypes();
+			var person = new Person { Notes = "these are some notes" };
+			var customer = AutoMapper.Mapper.Map<Customer>(person);
+			
+			Console.WriteLine(customer.MyCustomerNotes);
+			// Output: these are some notes
+		}
+	
+		[MapsTo(typeof(Customer))]
+	    public class Person 
+		{
+			public string FirstName { get; set; }
+			public string LastName { get; set; }
+			[MapsToProperty(typeof(Customer), "MyCustomerNotes")]
+			public string Notes { get; set; }
+		}
+	
+		public class Customer
+		{
+			public string FirstName { get; set; }
+			public string LastName { get; set; }
+			public string MyCustomerNotes { get; set; }
+		}
+	}
+
+#### MapsFromProperty example
+
+`[MapsFromProperty]` allows you to designate a destination type's property as mapping to a source type's property.  Simply: 
+
+1. Define your source class (in this example, Person)
+2. Define your destination class (in this example, Customer)
+2. Define your source class properties
+3. Add the `[MapsFromProperty]` to the destination type's property that you want to map to the source property.  In this case, the attribute's arguments are the source type and the name of the source type's property.
+
+##### Sample
+
+	public class Program
+	{
+		public void Main()
+		{
+			typeof(Program).Assembly.MapTypes();
+			var person = new Person { Notes = "these are some more notes" };
+			var customer = AutoMapper.Mapper.Map<Customer>(person);
+			
+			Console.WriteLine(customer.MyCustomerNotes);
+			// Output: these are some more notes
+		}
+	
+	    public class Person 
+		{
+			public string FirstName { get; set; }
+			public string LastName { get; set; }
+			public string Notes { get; set; }
+		}
+	
+		[MapsFrom(typeof(Person))]
+		public class Customer
+		{
+			public string FirstName { get; set; }
+			public string LastName { get; set; }
+			[MapsFromProperty(typeof(Person), "Notes")]
+			public string MyCustomerNotes { get; set; }
+		}
+	}
+
+
+
+### Ok, but I need some super custom mapping behavior. ###
 No problem - you can create a subclass of `MapsToAttribute` and override the ConfigureMapping method.  The mapping you create can then be customized, like so:
 
 	public class MapsToCustomer : MapsToAttribute
@@ -76,7 +163,7 @@ Also not a problem - you can create a subclass of `MapsToAttribute` and add a cu
 
 ### This seems like a lot of work.  Why not just call `Mapper.CreateMap()`?
 
-Simply put - I love anything that saves me keystrokes.  This is configurable enough for my needs and allows me to separate concerns nicely.
+Simply put - I love anything that saves me keystrokes.  This is configurable enough for my needs and allows me to separate concerns nicely.  Plus, the property attribution makes it super easy and useful to provide custom mappings!
 
 ### License ###
 This project is licensed under the MIT license.
