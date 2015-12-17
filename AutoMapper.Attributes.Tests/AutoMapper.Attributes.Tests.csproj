@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapsFromPropertyTests.cs" />
     <Compile Include="MapsFromTests.cs" />
+    <Compile Include="MapsToPropertyTests.cs" />
     <Compile Include="MapsToTests.cs" />
     <Compile Include="MapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

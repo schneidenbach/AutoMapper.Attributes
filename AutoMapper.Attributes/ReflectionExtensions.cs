@@ -9,7 +9,7 @@ namespace AutoMapper.Attributes
 {
     internal static class ReflectionExtensions
     {
-        public static PropertyInfo FindProperty(this Type type, string name, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        public static IEnumerable<PropertyInfo> FindProperties(this Type type, string name, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
         {
             PropertyInfo property = null;
             foreach (var propName in name.Split('.'))
@@ -18,14 +18,14 @@ namespace AutoMapper.Attributes
                 {
                     property = type.GetProperty(propName, bindingFlags);
                     ThrowIfPropertyNull(property, name);
+                    yield return property;
                     continue;
                 }
 
                 property = property.PropertyType.GetProperty(propName, bindingFlags);
                 ThrowIfPropertyNull(property, name);
+                yield return property;
             }
-
-            return property;
         }
 
         public static void ThrowIfPropertyNull(PropertyInfo propertyInfo, string name)

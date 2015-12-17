@@ -35,12 +35,13 @@ namespace AutoMapper.Attributes
 
         internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
         {
+            var sourcePropertyInfo = SourceType.FindProperties(PropertyName);
             return new PropertyMapInfo
             {
                 DestinationType = targetProperty.DeclaringType,
                 DestinationPropertyInfo = targetProperty,
                 SourceType = SourceType,
-                SourcePropertyInfo = SourceType.FindProperty(PropertyName)
+                SourcePropertyInfos = sourcePropertyInfo.ToArray()
             };
         }
     }

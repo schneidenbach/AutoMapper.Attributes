@@ -52,6 +52,12 @@ namespace AutoMapper.Attributes
                     Mapptivate(mapsToAttribute, sourceType, destinationType);
                     sourceTypes.Add(sourceType);
                     destinationTypes.Add(destinationType);
+
+                    if (mapsToAttribute.ReverseMap)
+                    {
+                        sourceTypes.Add(destinationType);
+                        destinationTypes.Add(sourceType);
+                    }
                 }
 
                 foreach (var mapsFromAttribute in t.MapsFromAttributes)
@@ -62,11 +68,17 @@ namespace AutoMapper.Attributes
                     Mapptivate(mapsFromAttribute, sourceType, destinationType);
                     sourceTypes.Add(sourceType);
                     destinationTypes.Add(destinationType);
+
+                    if (mapsFromAttribute.ReverseMap)
+                    {
+                        sourceTypes.Add(destinationType);
+                        destinationTypes.Add(sourceType);
+                    }
                 }
             }
 
-            ProcessMapsPropertyFromAttributes(destinationTypes);
             ProcessMapsPropertyToAttributes(sourceTypes);
+            ProcessMapsPropertyFromAttributes(destinationTypes);
         }
 
         private static void ProcessMapsPropertyToAttributes(HashSet<Type> sourceTypes)
@@ -97,7 +109,7 @@ namespace AutoMapper.Attributes
         private static void MapProperties(PropertyMapInfo propMapInfo)
         {
             var sourceType = propMapInfo.SourceType;
-            var sourceProperty = propMapInfo.SourcePropertyInfo;
+            var sourceProperty = propMapInfo.SourcePropertyInfos;
             var destinationType = propMapInfo.DestinationType;
             var destinationPropertyInfo = propMapInfo.DestinationPropertyInfo;
 
@@ -119,11 +131,14 @@ namespace AutoMapper.Attributes
             var memberConfigType = typeof (IMemberConfigurationExpression<>).MakeGenericType(sourceType);
             var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
 
+            var finalPropertyType = sourceProperty.Last().PropertyType;
+            var propertyExpression = sourceProperty.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null ? Expression.Property(sourceParameter, prop) : Expression.Property(current, prop));
+
             var memberOptions = Expression.Call(memberConfigTypeParameter,
                 "MapFrom",
-                new Type[] {sourceProperty.PropertyType},
+                new Type[] {finalPropertyType},
                 Expression.Lambda(
-                    Expression.Property(sourceParameter, sourceProperty),
+                    propertyExpression,
                     sourceParameter
                     ));
 

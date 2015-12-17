@@ -57,6 +57,7 @@
     <Compile Include="MapsToTests\SourceData.cs" />
     <Compile Include="MapsToTests\DestinationData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyMapTests\Container.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoMapper.Attributes\AutoMapper.Attributes.csproj">

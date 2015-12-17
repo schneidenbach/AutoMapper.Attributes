@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper.Attributes.Tests.TestAssembly.PropertyMapTests;
+using NUnit.Framework;
+
+namespace AutoMapper.Attributes.Tests
+{
+    public class MapsFromPropertyTests : MapTests
+    {
+        [Test]
+        public void TestDeepMapFromProperty()
+        {
+            var deep = new DeepContainer
+            {
+                DeeperContainer = new DeeperContainer
+                {
+                    Name = Grandma
+                }
+            };
+
+            var container = Mapper.Map<Container>(deep);
+            Assert.That(container.OtherDeeperContainerName, Is.EqualTo(Grandma));
+        }
+    }
+}

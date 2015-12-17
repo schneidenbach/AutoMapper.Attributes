@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace AutoMapper.Attributes
@@ -31,12 +32,13 @@ namespace AutoMapper.Attributes
         
         internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
         {
+            var destinationPropertyInfo = DestinationType.FindProperties(PropertyName);
             return new PropertyMapInfo
             {
                 DestinationType = DestinationType,
-                DestinationPropertyInfo = DestinationType.FindProperty(PropertyName),
+                DestinationPropertyInfo = destinationPropertyInfo.First(),
                 SourceType = targetProperty.DeclaringType,
-                SourcePropertyInfo = targetProperty
+                SourcePropertyInfos = new [] {targetProperty}
             };
         }
     }
