@@ -34,8 +34,8 @@ namespace AutoMapper.Attributes
                 .Select(t => new
                 {
                     Type = t,
-                    MapsToAttributes = t.GetCustomAttributes<MapsToAttribute>(),
-                    MapsFromAttributes = t.GetCustomAttributes<MapsFromAttribute>()
+                    MapsToAttributes = t.GetCustomAttributes(typeof(MapsToAttribute), true).Cast<MapsToAttribute>(),
+                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>()
                 })
                 .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
             
@@ -89,7 +89,7 @@ namespace AutoMapper.Attributes
                 MapToProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
                 {
                     Property = p,
-                    MapToAttributes = p.GetCustomAttributes<MapsToPropertyAttribute>().ToList()
+                    MapToAttributes = p.GetCustomAttributes(typeof(MapsToPropertyAttribute), true).Cast<MapsToPropertyAttribute>().ToList()
                 }).Where(p => p.MapToAttributes.Any()).ToList()
             }).Where(t => t.MapToProperties.Any()).ToList();
 
@@ -160,7 +160,7 @@ namespace AutoMapper.Attributes
                 MapFromProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
                 {
                     Property = p,
-                    MapFromAttributes = p.GetCustomAttributes<MapsFromPropertyAttribute>().ToList()
+                    MapFromAttributes = p.GetCustomAttributes(typeof(MapsFromPropertyAttribute), true).Cast<MapsFromPropertyAttribute>().ToList()
                 }).Where(p => p.MapFromAttributes.Any()).ToList()
             }).Where(t => t.MapFromProperties.Any()).ToList();
 
