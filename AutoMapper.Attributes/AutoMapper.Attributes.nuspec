@@ -12,5 +12,12 @@
     <description>$description$</description>
     <copyright>Copyright 2015</copyright>
     <tags>AutoMapper</tags>
+	<dependencies>
+		<dependency id="AutoMapper" version="4.0.0" />
+	</dependencies>
   </metadata>
+  <files>
+	<file src="bin\Release\AutoMapper.Attributes.dll" />
+	<file src="bin\Release\AutoMapper.Attributes.xml" />
+  </files>
 </package>

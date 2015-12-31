@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace AutoMapper.Attributes
 {
-
+    /// <summary>
+    /// Base class for mapping types to other types.
+    /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class Mapptribute : Attribute
     {
-        internal protected Mapptribute() {}
+        internal Mapptribute() {}
         
         /// <summary>
         /// If true, mapping will be configured in reverse as well.
