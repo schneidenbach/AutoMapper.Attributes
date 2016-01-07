@@ -1,7 +1,7 @@
 # AutoMapper.Attributes
 A convenient way to create AutoMapper type mappings using attributes.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/fkedmn5vx1j9ne5x?svg=true)](https://ci.appveyor.com/project/schneidsDotNet/automapper-attributes)
+[![Build status](https://ci.appveyor.com/api/projects/status/fkedmn5vx1j9ne5x?svg=true)](https://ci.appveyor.com/project/schneidsDotNet/automapper-attributes)  [![Nuget](https://img.shields.io/nuget/dt/Automapper.Attributes.svg)](https://www.nuget.org/packages/AutoMapper.Attributes/)
 
 ### How to use ###
 1. Create the classes you'd like to map.
