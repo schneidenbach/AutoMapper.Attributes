@@ -19,5 +19,6 @@
   <files>
 	<file src="bin\Release\AutoMapper.Attributes.dll" />
 	<file src="bin\Release\AutoMapper.Attributes.xml" />
+	<file src="NuSpec\*.ps1" target="tools" />
   </files>
 </package>
