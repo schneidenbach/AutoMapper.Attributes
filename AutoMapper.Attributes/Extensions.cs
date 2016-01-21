@@ -9,6 +9,9 @@ using AutoMapper;
 
 namespace AutoMapper.Attributes
 {
+    /// <summary>
+    /// Contains the method to map the assembly to attributes.
+    /// </summary>
     public static class Extensions
     {
         static Extensions()

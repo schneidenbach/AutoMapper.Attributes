@@ -12,7 +12,7 @@ namespace AutoMapper.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class Mapptribute : Attribute
     {
-        internal protected Mapptribute() {}
+        internal Mapptribute() {}
         
         /// <summary>
         /// If true, mapping will be configured in reverse as well.
