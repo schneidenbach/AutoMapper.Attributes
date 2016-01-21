@@ -15,7 +15,7 @@ namespace AutoMapper.Attributes
         {
             GenericCreateMap =
                 typeof (Mapper).GetMethods()
-                    .Single(m => m.Name == "CreateMap" && 
+                    .Single(m => m.Name == nameof(Mapper.CreateMap) && 
                                  m.IsGenericMethodDefinition && 
                                  m.GetGenericArguments().Count() == 2 &&
                                  !m.GetParameters().Any());
@@ -24,7 +24,7 @@ namespace AutoMapper.Attributes
         private static MethodInfo GenericCreateMap { get; }
 
         /// <summary>
-        /// Maps all types with the MapsTo attribute to the type specified in MapTo.
+        /// Maps all types with the MapsTo/MapsFrom attributes to the type specified in MapTo/MapFrom.
         /// </summary>
         /// <param name="assembly">The assembly to search for types.</param>
         public static void MapTypes(this Assembly assembly)
@@ -39,50 +39,94 @@ namespace AutoMapper.Attributes
                 })
                 .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
             
-            var sourceTypes = new HashSet<Type>();
-            var destinationTypes = new HashSet<Type>();
-
-            foreach (var t in mappedTypes)
+            var sourceAndDestinationTypes = new Dictionary<Type, HashSet<Type>>();
+            
+            foreach (var type in mappedTypes)
             {
-                foreach (var mapsToAttribute in t.MapsToAttributes)
-                {
-                    var sourceType = t.Type;
-                    var destinationType = mapsToAttribute.DestinationType;
-                    
-                    Mapptivate(mapsToAttribute, sourceType, destinationType);
-                    sourceTypes.Add(sourceType);
-                    destinationTypes.Add(destinationType);
+                ProcessMapsToAttributes(type.Type, type.MapsToAttributes, sourceAndDestinationTypes);
+                ProcessMapsFromAttributes(type.Type, type.MapsFromAttributes, sourceAndDestinationTypes);
+            }
 
-                    if (mapsToAttribute.ReverseMap)
-                    {
-                        sourceTypes.Add(destinationType);
-                        destinationTypes.Add(sourceType);
-                    }
+            ProcessMapsPropertyToAttributes(sourceAndDestinationTypes);
+            ProcessMapsPropertyFromAttributes(sourceAndDestinationTypes);
+        }
+
+        private static void ProcessMapsFromAttributes(Type type, IEnumerable<MapsFromAttribute> mapsFromAttributes, Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes)
+        {
+            foreach (var mapsFromAttribute in mapsFromAttributes)
+            {
+                var sourceType = mapsFromAttribute.SourceType;
+                var destinationType = type;
+
+                Mapptivate(mapsFromAttribute, sourceType, destinationType);
+                AddToDictionary(sourceAndDestinationTypes, sourceType, destinationType);
+
+                if (mapsFromAttribute.ReverseMap)
+                {
+                    AddToDictionary(sourceAndDestinationTypes, destinationType, sourceType);
                 }
+            }
+        }
 
-                foreach (var mapsFromAttribute in t.MapsFromAttributes)
+        private static void ProcessMapsToAttributes(Type type, IEnumerable<MapsToAttribute> mapsToAttributes, Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes)
+        {
+            foreach (var mapsToAttribute in mapsToAttributes)
+            {
+                var sourceType = type;
+                var destinationType = mapsToAttribute.DestinationType;
+
+                Mapptivate(mapsToAttribute, sourceType, destinationType);
+                AddToDictionary(sourceAndDestinationTypes, sourceType, destinationType);
+
+                if (mapsToAttribute.ReverseMap)
                 {
-                    var sourceType = mapsFromAttribute.SourceType;
-                    var destinationType = t.Type;
+                    AddToDictionary(sourceAndDestinationTypes, destinationType, sourceType);
+                }
+            }
+        }
 
-                    Mapptivate(mapsFromAttribute, sourceType, destinationType);
-                    sourceTypes.Add(sourceType);
-                    destinationTypes.Add(destinationType);
+        private static void AddToDictionary(Dictionary<Type, HashSet<Type>> dict, Type sourceType, Type destinationType)
+        {
+            if (!dict.ContainsKey(sourceType))
+                dict[sourceType] = new HashSet<Type>();
 
-                    if (mapsFromAttribute.ReverseMap)
+            dict[sourceType].Add(destinationType);
+        }
+
+        private static void ProcessMapsPropertyFromAttributes(Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes)
+        {
+            var destinationTypes = sourceAndDestinationTypes.SelectMany(t => t.Value).Distinct();
+            var typesWithMapToProperties = destinationTypes.Select(t => new
+            {
+                Type = t,
+                MapFromProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
+                {
+                    Property = p,
+                    MapFromAttributes = p.GetCustomAttributes(typeof(MapsFromPropertyAttribute), true).Cast<MapsFromPropertyAttribute>().ToList()
+                }).Where(p => p.MapFromAttributes.Any()).ToList()
+            }).Where(t => t.MapFromProperties.Any()).ToList();
+
+            foreach (var t in typesWithMapToProperties)
+            {
+                var destinationType = t.Type;
+                foreach (var p in t.MapFromProperties)
+                {
+                    foreach (var mapToAttribute in p.MapFromAttributes)
                     {
-                        sourceTypes.Add(destinationType);
-                        destinationTypes.Add(sourceType);
+                        var propMapInfo = mapToAttribute.GetPropertyMapInfo(p.Property);
+                        if (propMapInfo.DestinationType.IsAssignableFrom(destinationType))
+                        {
+                            propMapInfo.DestinationType = destinationType;
+                            MapProperties(propMapInfo);
+                        }
                     }
                 }
             }
-
-            ProcessMapsPropertyToAttributes(sourceTypes);
-            ProcessMapsPropertyFromAttributes(destinationTypes);
         }
 
-        private static void ProcessMapsPropertyToAttributes(HashSet<Type> sourceTypes)
+        private static void ProcessMapsPropertyToAttributes(Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes)
         {
+            var sourceTypes = sourceAndDestinationTypes.Keys;
             var typesWithMapToProperties = sourceTypes.Select(t => new
             {
                 Type = t,
@@ -95,12 +139,20 @@ namespace AutoMapper.Attributes
 
             foreach (var t in typesWithMapToProperties)
             {
+                var sourceType = t.Type;
                 foreach (var p in t.MapToProperties)
                 {
                     foreach (var mapToAttribute in p.MapToAttributes)
                     {
                         var propMapInfo = mapToAttribute.GetPropertyMapInfo(p.Property);
-                        MapProperties(propMapInfo);
+                        foreach (var destinationType in sourceAndDestinationTypes[sourceType])
+                        {
+                            if (sourceType.IsAssignableFrom(propMapInfo.SourceType))
+                            {
+                                propMapInfo.DestinationType = destinationType;
+                                MapProperties(propMapInfo);
+                            }
+                        }
                     }
                 }
             }
@@ -124,9 +176,9 @@ namespace AutoMapper.Attributes
                 Expression.Convert(
                     Expression.Property(destinationParameter, destinationPropertyInfo),
                     typeof (object)
-                    ),
+                ),
                 destinationParameter
-                );
+            );
 
             var memberConfigType = typeof (IMemberConfigurationExpression<>).MakeGenericType(sourceType);
             var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
@@ -135,46 +187,20 @@ namespace AutoMapper.Attributes
             var propertyExpression = sourceProperty.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null ? Expression.Property(sourceParameter, prop) : Expression.Property(current, prop));
 
             var memberOptions = Expression.Call(memberConfigTypeParameter,
-                "MapFrom",
+                nameof(IMemberConfigurationExpression<object>.MapFrom),
                 new Type[] {finalPropertyType},
                 Expression.Lambda(
                     propertyExpression,
                     sourceParameter
                     ));
-
-            var emptyTypes = Enumerable.Empty<Type>().ToArray();
+            
             var forMemberMethod = Expression.Call(mapObjectExpression,
-                "ForMember",
-                emptyTypes,
+                nameof(IMappingExpression.ForMember),
+                Type.EmptyTypes,
                 destinationMember,
                 Expression.Lambda(memberOptions, memberConfigTypeParameter));
 
             Expression.Lambda(forMemberMethod).Compile().DynamicInvoke();
-        }
-
-        private static void ProcessMapsPropertyFromAttributes(HashSet<Type> destinationTypes)
-        {
-            var typesWithMapToProperties = destinationTypes.Select(t => new
-            {
-                Type = t,
-                MapFromProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
-                {
-                    Property = p,
-                    MapFromAttributes = p.GetCustomAttributes(typeof(MapsFromPropertyAttribute), true).Cast<MapsFromPropertyAttribute>().ToList()
-                }).Where(p => p.MapFromAttributes.Any()).ToList()
-            }).Where(t => t.MapFromProperties.Any()).ToList();
-
-            foreach (var t in typesWithMapToProperties)
-            {
-                foreach (var p in t.MapFromProperties)
-                {
-                    foreach (var mapToAttribute in p.MapFromAttributes)
-                    {
-                        var propMapInfo = mapToAttribute.GetPropertyMapInfo(p.Property);
-                        MapProperties(propMapInfo);
-                    }
-                }
-            }
         }
 
         /// <summary>

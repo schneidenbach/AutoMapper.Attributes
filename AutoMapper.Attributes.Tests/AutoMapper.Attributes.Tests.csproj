@@ -57,6 +57,7 @@
     <Compile Include="MapsToTests.cs" />
     <Compile Include="MapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubclassTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

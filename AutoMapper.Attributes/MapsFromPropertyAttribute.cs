@@ -22,6 +22,7 @@ namespace AutoMapper.Attributes
         /// </summary>
         public string PropertyName { get; }
 
+
         /// <summary>
         /// Creates the MapsFromProperty attribute.
         /// </summary>

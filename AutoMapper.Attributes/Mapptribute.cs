@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AutoMapper.Attributes
 {
-
+    /// <summary>
+    /// The base class for attributes that map objects to other objects using AutoMapper.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class Mapptribute : Attribute
     {

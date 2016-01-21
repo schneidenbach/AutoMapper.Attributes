@@ -1,4 +1,4 @@
-﻿using AutoMapper.Attributes.Tests.TestAssembly.MapsFromTests;
+﻿using AutoMapper.Attributes.Tests.TestAssembly.SubclassTests;
 using NUnit.Framework;
 
 namespace AutoMapper.Attributes.Tests
@@ -11,8 +11,7 @@ namespace AutoMapper.Attributes.Tests
         [SetUp]
         public void Setup()
         {
-            typeof(SourceData).Assembly.MapTypes();
+            typeof(Person).Assembly.MapTypes();
         }
-
     }
 }
