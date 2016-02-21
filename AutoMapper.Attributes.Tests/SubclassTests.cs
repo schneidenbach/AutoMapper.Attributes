@@ -14,7 +14,7 @@ namespace AutoMapper.Attributes.Tests
         public void SocialSecurityNumberIsMappedFromMapsFromPropertyAttribute()
         {
             var sourceEmployee = new SourceEmployee { SocialSecurityNumber = Grandma };
-            var targetEmployee = Mapper.Map<TargetEmployee>(sourceEmployee);
+            var targetEmployee = TestMapper.Mapper.Map<TargetEmployee>(sourceEmployee);
             Assert.That(targetEmployee.Ssn, Is.EqualTo(Grandma));
         }
 
@@ -22,7 +22,7 @@ namespace AutoMapper.Attributes.Tests
         public void EmployeeCodeIsMappedFromMapsToPropertyAttribute()
         {
             var sourceEmployee = new SourceEmployee { EmployeeId = Grandma };
-            var targetEmployee = Mapper.Map<TargetEmployee>(sourceEmployee);
+            var targetEmployee = TestMapper.Mapper.Map<TargetEmployee>(sourceEmployee);
             Assert.That(targetEmployee.Code, Is.EqualTo(Grandma));
         }
     }

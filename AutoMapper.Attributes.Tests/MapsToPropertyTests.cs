@@ -16,7 +16,7 @@ namespace AutoMapper.Attributes.Tests
                 }
             };
 
-            var container = Mapper.Map<Container>(deep.DeeperContainer);
+            var container = TestMapper.Mapper.Map<Container>(deep.DeeperContainer);
             Assert.That(container.DeeperContainersName, Is.EqualTo(Grandma));
         }
 
@@ -25,7 +25,7 @@ namespace AutoMapper.Attributes.Tests
         {
             var deep = new DeeperContainer();
 
-            var container = Mapper.Map<Container>(deep);
+            var container = TestMapper.Mapper.Map<Container>(deep);
             Assert.That(container.DeeperContainersName, Is.Null);
         }
     }

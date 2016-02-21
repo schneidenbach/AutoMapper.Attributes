@@ -8,7 +8,7 @@ namespace AutoMapper.Attributes.Tests
         [Test]
         public void MapperMapsNameProperty()
         {
-            var destination = Mapper.Map<DestinationData>(new SourceData
+            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceData
             {
                 Name = Grandma
             });
@@ -18,7 +18,7 @@ namespace AutoMapper.Attributes.Tests
         [Test]
         public void MapperMapsUsingGenericConfigureMethod()
         {
-            var destination = Mapper.Map<DestinationData>(new SourceDataSpecialAttribute
+            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceDataSpecialAttribute
             {
                 AnotherName = Grandma
             });
@@ -28,7 +28,7 @@ namespace AutoMapper.Attributes.Tests
         [Test]
         public void MapperMapsUsingNormalConfigureMethod()
         {
-            var destination = Mapper.Map<DestinationData>(new SourceDataNormalAttribute
+            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceDataNormalAttribute
             {
                 YetAnotherName = Grandma
             });
