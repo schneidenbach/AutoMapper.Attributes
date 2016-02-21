@@ -24,21 +24,21 @@ namespace AutoMapper.Attributes.Tests
         [Test]
         public void MapperMapsNameProperty()
         {
-            var destination = Mapper.Map<DestinationData>(SourceData);
+            var destination = TestMapper.Mapper.Map<DestinationData>(SourceData);
             Assert.That(destination.Name, Is.EqualTo(Grandma));
         }
 
         [Test]
         public void MapperMapsUsingGenericConfigureMethod()
         {
-            var destination = Mapper.Map<DestinationDataSpecialAttribute>(SourceData);
+            var destination = TestMapper.Mapper.Map<DestinationDataSpecialAttribute>(SourceData);
             Assert.That(destination.AnotherName, Is.EqualTo(Grandma));
         }
 
         [Test]
         public void MapperMapsUsingNormalConfigureMethod()
         {
-            var destination = Mapper.Map<DestinationDataNormalAttribute>(SourceData);
+            var destination = TestMapper.Mapper.Map<DestinationDataNormalAttribute>(SourceData);
             Assert.That(destination.YetAnotherName, Is.EqualTo(Grandma));
         }
     }
