@@ -1,19 +1,184 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
 
 namespace AutoMapper.Attributes
 {
-    /// <summary>
-    /// Contains the method to map the assembly to attributes.
-    /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// Maps all types with the MapsTo/MapsFrom attributes to the type specified in MapTo/MapFrom.
+        /// </summary>
+        /// <param name="assembly">The assembly to search for types.</param>
+        /// <param name="mapperConfiguration">The mapper configuration.</param>
+        public static void MapTypes(this Assembly assembly, IMapperConfigurationExpression mapperConfiguration)
+        {
+            var assemblyTypes = assembly.GetTypes();
+            var mappedTypes = 
+                assemblyTypes.Select(t => new
+                {
+                    Type = t,
+                    MapsToAttributes = t.GetCustomAttributes(typeof(MapsToAttribute), true).Cast<MapsToAttribute>(),
+                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>()
+                })
+                .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
+            
+            foreach (var type in mappedTypes)
+            {
+                ProcessMapsToAttributes(type.Type, type.MapsToAttributes, mapperConfiguration, assemblyTypes);
+                ProcessMapsFromAttributes(type.Type, type.MapsFromAttributes, mapperConfiguration, assemblyTypes);
+            }
+        }
+
+        private static void ProcessMapsFromAttributes(
+            Type targetType, 
+            IEnumerable<MapsFromAttribute> mapsFromAttributes, 
+            IMapperConfigurationExpression mapperConfiguration, 
+            Type[] types)
+        {
+            foreach (var mapsFromAttribute in mapsFromAttributes)
+            {
+                var sourceType = mapsFromAttribute.SourceType;
+                Mapptivate(mapsFromAttribute, sourceType, targetType, mapperConfiguration, types, mapsFromAttribute.ReverseMap);
+            }
+        }
+        
+        private static void ProcessMapsToAttributes(
+            Type sourceType, 
+            IEnumerable<MapsToAttribute> mapsToAttributes, 
+            IMapperConfigurationExpression mapperConfiguration, 
+            Type[] types)
+        {
+            foreach (var mapsToAttribute in mapsToAttributes)
+            {
+                var targetType = mapsToAttribute.TargetType;
+                Mapptivate(mapsToAttribute, sourceType, targetType, mapperConfiguration, types, mapsToAttribute.ReverseMap);
+            }
+        }
+
+        private static PropertyMapInfo[] GetMappedProperties(Type[] typesToSearch, Type sourceType, Type targetType)
+        {
+            return new[]
+            {
+                typesToSearch
+                    .Where(sourceType.IsAssignableFrom)
+                    .SelectMany(t =>
+                        t.GetProperties().Select(p => new
+                        {
+                            Property = p,
+                            MapsToAttributes =
+                                p.GetCustomAttributes<MapsToPropertyAttribute>()
+                                    .Where(pt => pt.TargetType.IsAssignableFrom(targetType))
+                        }))
+                    .SelectMany(p => p.MapsToAttributes.Select(a => a.GetPropertyMapInfo(p.Property))),
+
+                typesToSearch
+                    .Where(targetType.IsAssignableFrom)
+                    .SelectMany(t =>
+                        t.GetProperties().Select(p => new
+                        {
+                            Property = p,
+                            MapsToAttributes =
+                                p.GetCustomAttributes<MapsFromPropertyAttribute>()
+                                    .Where(pt => pt.SourceType.IsAssignableFrom(sourceType))
+                        }))
+                    .SelectMany(p => p.MapsToAttributes.Select(a => a.GetPropertyMapInfo(p.Property)))
+                    .ToArray()
+            }.SelectMany(p => p).ToArray();
+        }
+
+        /// <summary>
+        /// All these map puns are giving me a headache.
+        /// </summary>
+        private static void Mapptivate(Mapptribute mapsToAttribute, Type sourceType, Type targetType, IMapperConfigurationExpression mapperConfiguration, Type[] types, bool reverseMap)
+        {
+            var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, targetType);
+            var mappedProperties = GetMappedProperties(types, sourceType, targetType);
+            var mappingExpression = MapTypes(sourceType, targetType, mappedProperties, mapperConfiguration);
+            configureMappingGenericMethod?.Invoke(mapsToAttribute, new[] { mappingExpression });
+
+            if (reverseMap)
+            {
+                Mapptivate(mapsToAttribute, targetType, sourceType, mapperConfiguration, types, false);
+            }
+        }
+
+        private static MethodInfo GetConfigureMappingGenericMethod(Mapptribute mapsToAttribute, Type sourceType, Type targetType)
+        {
+            return mapsToAttribute.GetType()
+                .GetMethod("ConfigureMapping",
+                           new[] { typeof(IMappingExpression<,>).MakeGenericType(sourceType, targetType) });
+        }
+
+        private static object MapTypes(Type sourceType,
+            Type targetType,
+            PropertyMapInfo[] propertyMapInfos,
+            IMapperConfigurationExpression mapperConfiguration)
+        {
+            var createMapMethodInfo = GenericCreateMap.MakeGenericMethod(sourceType, targetType);
+
+            //actually create the mapping
+            var mapObject = createMapMethodInfo.Invoke(mapperConfiguration, new object[] { });
+            Debug.WriteLine($"Mapping created for source type {sourceType.Name} to target type {targetType.Name}");
+
+            var mapObjectExpression = Expression.Constant(mapObject);
+            var sourceTypeParameter = Expression.Parameter(sourceType);
+            var targetTypeParameter = Expression.Parameter(targetType);
+
+            foreach (var propMapInfo in propertyMapInfos)
+            {
+                var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
+                var targetPropertyInfo = propMapInfo.TargetPropertyInfo;
+
+                var targetPropertyName = targetPropertyInfo.Name;
+                Debug.WriteLine($"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
+                
+                var targetMember = Expression.Lambda(
+                    Expression.Property(targetTypeParameter, targetPropertyInfo), targetTypeParameter
+                );
+
+                var finalPropertyType = sourcePropertyInfos.Last().PropertyType;
+                var memberConfigType = typeof(IMemberConfigurationExpression<,,>)
+                    .MakeGenericType(sourceType, targetType, finalPropertyType);
+                var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
+
+                var propertyExpression =
+                    sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null
+                        ? Expression.Property(sourceTypeParameter, prop)
+                        : Expression.Property(current, prop));
+
+                var memberOptions = Expression.Call(memberConfigTypeParameter,
+                    nameof(IMemberConfigurationExpression.MapFrom),
+                    new Type[] { finalPropertyType },
+                    Expression.Lambda(
+                        propertyExpression,
+                        sourceTypeParameter
+                        ));
+
+                var forMemberMethod =
+                    mapObject.GetType()
+                        .GetMethods()
+                        .Single(
+                            m =>
+                                m.Name == nameof(IMappingExpression<object, object>.ForMember) &&
+                                m.GetGenericArguments().Length == 1).MakeGenericMethod(finalPropertyType);
+
+                var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
+                var forMemberMethodExpression = Expression.Call(
+                    mapObjectExpression,
+                    forMemberMethod,
+                    Expression.Constant(targetMember),
+                    lambdaExpression);
+
+                Expression.Lambda(forMemberMethodExpression).Compile().DynamicInvoke();
+            }
+
+            return mapObject;
+        }
+
         static Extensions()
         {
             GenericCreateMap =
@@ -23,230 +188,7 @@ namespace AutoMapper.Attributes
                                  m.GetGenericArguments().Length == 2 &&
                                  !m.GetParameters().Any());
         }
-        
+
         private static MethodInfo GenericCreateMap { get; }
-        
-        /// <summary>
-        /// Maps all types with the MapsTo/MapsFrom attributes to the type specified in MapTo/MapFrom.
-        /// </summary>
-        /// <param name="assembly">The assembly to search for types.</param>
-        /// <param name="mapperConfiguration">The mapper configuration.</param>
-        public static void MapTypes(this Assembly assembly, IMapperConfigurationExpression mapperConfiguration)
-        {
-            var types = assembly.GetTypes();
-            var mappedTypes = types
-                .Select(t => new
-                {
-                    Type = t,
-                    MapsToAttributes = t.GetCustomAttributes(typeof (MapsToAttribute), true).Cast<MapsToAttribute>(),
-                    MapsFromAttributes = t.GetCustomAttributes(typeof (MapsFromAttribute), true).Cast<MapsFromAttribute>()
-                })
-                .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
-
-            var sourceAndDestinationTypes = new Dictionary<Type, HashSet<Type>>();
-
-            foreach (var type in mappedTypes)
-            {
-                ProcessMapsToAttributes(type.Type, type.MapsToAttributes, sourceAndDestinationTypes, mapperConfiguration);
-                ProcessMapsFromAttributes(type.Type, type.MapsFromAttributes, sourceAndDestinationTypes, mapperConfiguration);
-            }
-
-            ProcessMapsPropertyToAttributes(sourceAndDestinationTypes, mapperConfiguration);
-            ProcessMapsPropertyFromAttributes(sourceAndDestinationTypes, mapperConfiguration);
-        }
-
-        private static void ProcessMapsFromAttributes(Type type, IEnumerable<MapsFromAttribute> mapsFromAttributes, Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes, IMapperConfigurationExpression mapperConfiguration)
-        {
-            foreach (var mapsFromAttribute in mapsFromAttributes)
-            {
-                var sourceType = mapsFromAttribute.SourceType;
-                var destinationType = type;
-
-                Mapptivate(mapsFromAttribute, sourceType, destinationType, mapperConfiguration);
-                AddToDictionary(sourceAndDestinationTypes, sourceType, destinationType);
-
-                if (mapsFromAttribute.ReverseMap)
-                {
-                    AddToDictionary(sourceAndDestinationTypes, destinationType, sourceType);
-                }
-            }
-        }
-
-        private static void ProcessMapsToAttributes(Type type, IEnumerable<MapsToAttribute> mapsToAttributes, Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes, IMapperConfigurationExpression mapperConfiguration)
-        {
-            foreach (var mapsToAttribute in mapsToAttributes)
-            {
-                var sourceType = type;
-                var destinationType = mapsToAttribute.DestinationType;
-
-                Mapptivate(mapsToAttribute, sourceType, destinationType, mapperConfiguration);
-                AddToDictionary(sourceAndDestinationTypes, sourceType, destinationType);
-
-                if (mapsToAttribute.ReverseMap)
-                {
-                    AddToDictionary(sourceAndDestinationTypes, destinationType, sourceType);
-                }
-            }
-        }
-
-        private static void AddToDictionary(Dictionary<Type, HashSet<Type>> dict, Type sourceType, Type destinationType)
-        {
-            if (!dict.ContainsKey(sourceType))
-                dict[sourceType] = new HashSet<Type>();
-
-            dict[sourceType].Add(destinationType);
-        }
-
-        private static void ProcessMapsPropertyFromAttributes(Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes, IMapperConfigurationExpression mapperConfiguration)
-        {
-            var destinationTypes = sourceAndDestinationTypes.SelectMany(t => t.Value).Distinct();
-            var typesWithMapToProperties = destinationTypes.Select(t => new
-            {
-                Type = t,
-                MapFromProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
-                {
-                    Property = p,
-                    MapFromAttributes = p.GetCustomAttributes(typeof(MapsFromPropertyAttribute), true).Cast<MapsFromPropertyAttribute>().ToList()
-                }).Where(p => p.MapFromAttributes.Any()).ToList()
-            }).Where(t => t.MapFromProperties.Any()).ToList();
-
-            foreach (var t in typesWithMapToProperties)
-            {
-                var destinationType = t.Type;
-                foreach (var p in t.MapFromProperties)
-                {
-                    foreach (var mapToAttribute in p.MapFromAttributes)
-                    {
-                        var propMapInfo = mapToAttribute.GetPropertyMapInfo(p.Property);
-                        if (propMapInfo.DestinationType.IsAssignableFrom(destinationType))
-                        {
-                            propMapInfo.DestinationType = destinationType;
-                            MapProperties(propMapInfo, mapperConfiguration);
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void ProcessMapsPropertyToAttributes(Dictionary<Type, HashSet<Type>> sourceAndDestinationTypes, IMapperConfigurationExpression mapperConfiguration)
-        {
-            var sourceTypes = sourceAndDestinationTypes.Keys;
-            var typesWithMapToProperties = sourceTypes.Select(t => new
-            {
-                Type = t,
-                MapToProperties = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(p => new
-                {
-                    Property = p,
-                    MapToAttributes = p.GetCustomAttributes(typeof(MapsToPropertyAttribute), true).Cast<MapsToPropertyAttribute>().ToList()
-                }).Where(p => p.MapToAttributes.Any()).ToList()
-            }).Where(t => t.MapToProperties.Any()).ToList();
-
-            foreach (var t in typesWithMapToProperties)
-            {
-                var sourceType = t.Type;
-                foreach (var p in t.MapToProperties)
-                {
-                    foreach (var mapToAttribute in p.MapToAttributes)
-                    {
-                        var propMapInfo = mapToAttribute.GetPropertyMapInfo(p.Property);
-                        foreach (var destinationType in sourceAndDestinationTypes[sourceType])
-                        {
-                            if (sourceType.IsAssignableFrom(propMapInfo.SourceType))
-                            {
-                                propMapInfo.DestinationType = destinationType;
-                                MapProperties(propMapInfo, mapperConfiguration);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void MapProperties(PropertyMapInfo propMapInfo, IMapperConfigurationExpression mapperConfiguration)
-        {
-            var sourceType = propMapInfo.SourceType;
-            var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
-            var destinationType = propMapInfo.DestinationType;
-            var destinationPropertyInfo = propMapInfo.DestinationPropertyInfo;
-
-            var createMapMethodInfo = GenericCreateMap.MakeGenericMethod(sourceType, destinationType);
-
-            //actually create the mapping
-            var mapObject = createMapMethodInfo.Invoke(mapperConfiguration, new object[] {});
-            var mapObjectExpression = Expression.Constant(mapObject);
-
-            var sourceParameter = Expression.Parameter(sourceType);
-            var destinationParameter = Expression.Parameter(destinationType);
-
-            var destinationMember = Expression.Lambda(
-                Expression.Property(destinationParameter, destinationPropertyInfo), destinationParameter
-            );
-            
-            var finalPropertyType = sourcePropertyInfos.Last().PropertyType;
-            var memberConfigType = typeof (IMemberConfigurationExpression<,,>)
-                .MakeGenericType(sourceType, destinationType, finalPropertyType);
-            var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
-
-            var propertyExpression = 
-                sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null 
-                    ? Expression.Property(sourceParameter, prop) 
-                    : Expression.Property(current, prop));
-
-            var memberOptions = Expression.Call(memberConfigTypeParameter,
-                nameof(IMemberConfigurationExpression.MapFrom),
-                new Type[] {finalPropertyType},
-                Expression.Lambda(
-                    propertyExpression,
-                    sourceParameter
-                    ));
-
-            var forMemberMethod =
-                mapObject.GetType()
-                    .GetMethods()
-                    .Single(
-                        m =>
-                            m.Name == nameof(IMappingExpression<object, object>.ForMember) &&
-                            m.GetGenericArguments().Length == 1).MakeGenericMethod(finalPropertyType);
-
-            var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
-            var forMemberMethodExpression = Expression.Call(mapObjectExpression,
-                forMemberMethod,
-                Expression.Constant(destinationMember),
-                lambdaExpression);
-
-            Expression.Lambda(forMemberMethodExpression).Compile().DynamicInvoke();
-        }
-
-        /// <summary>
-        /// All these map puns are giving me a headache.
-        /// </summary>
-        private static void Mapptivate(Mapptribute mapsToAttribute, Type sourceType, Type destinationType, IMapperConfigurationExpression mapperConfiguration)
-        {
-            var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, destinationType);
-
-            if (configureMappingGenericMethod == null)
-            {
-                var map = mapperConfiguration.CreateMap(sourceType, destinationType);
-                mapsToAttribute.ConfigureMapping(map);
-            }
-            else
-            {
-                var createMapMethod = GenericCreateMap.MakeGenericMethod(sourceType, destinationType);
-                var map = createMapMethod.Invoke(mapperConfiguration, new object[] {});
-                configureMappingGenericMethod.Invoke(mapsToAttribute, new[] {map});
-            }
-
-            if (mapsToAttribute.ReverseMap)
-            {
-                mapperConfiguration.CreateMap(destinationType, sourceType);
-            }
-        }
-
-        private static MethodInfo GetConfigureMappingGenericMethod(Mapptribute mapsToAttribute, Type sourceType, Type destinationType)
-        {
-            return mapsToAttribute.GetType()
-                .GetMethod(nameof(Mapptribute.ConfigureMapping), new[] {typeof (IMappingExpression<,>)
-                .MakeGenericType(sourceType, destinationType)});
-        }
     }
 }

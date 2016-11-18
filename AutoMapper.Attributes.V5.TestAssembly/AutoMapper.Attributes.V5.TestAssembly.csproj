@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapsFromTests\DestinationData.cs" />
-    <Compile Include="MapsFromTests\MapsFromSourceDataNormalAttribute.cs" />
     <Compile Include="MapsFromTests\MapsFromSourceDataSpecialAttribute.cs" />
     <Compile Include="MapsFromTests\SourceData.cs" />
     <Compile Include="MapsFromTests\SourceDataNormalAttribute.cs" />
@@ -53,7 +52,6 @@
     <Compile Include="MapsToTests\DestinationData.cs" />
     <Compile Include="MapsToTests\DestinationDataNormalAttribute.cs" />
     <Compile Include="MapsToTests\DestinationDataSpecialAttribute.cs" />
-    <Compile Include="MapsToTests\MapsToDestinationDataNormalAttribute.cs" />
     <Compile Include="MapsToTests\MapsToDestinationDataSpecialAttribute.cs" />
     <Compile Include="MapsToTests\SourceData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

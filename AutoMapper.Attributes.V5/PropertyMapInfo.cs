@@ -7,7 +7,7 @@ namespace AutoMapper.Attributes
     {
         public PropertyInfo[] SourcePropertyInfos { get; set; }
         public Type SourceType { get; set; }
-        public PropertyInfo DestinationPropertyInfo { get; set; }
-        public Type DestinationType { get; set; }
+        public PropertyInfo TargetPropertyInfo { get; set; }
+        public Type TargetType { get; set; }
     }
 }

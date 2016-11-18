@@ -24,15 +24,5 @@ namespace AutoMapper.Attributes.V5.Tests
             });
             Assert.That(destination.Name, Is.EqualTo(Grandma));
         }
-
-        [Test]
-        public void MapperMapsUsingNormalConfigureMethod()
-        {
-            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceDataNormalAttribute
-            {
-                YetAnotherName = Grandma
-            });
-            Assert.That(destination.Name, Is.EqualTo(Grandma));
-        }
     }
 }

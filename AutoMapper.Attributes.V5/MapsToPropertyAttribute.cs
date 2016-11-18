@@ -12,7 +12,7 @@ namespace AutoMapper.Attributes
         /// <summary>
         /// The type whose property the target property will be mapped to.
         /// </summary>
-        public Type DestinationType { get; }
+        public Type TargetType { get; }
 
         /// <summary>
         /// The name of the property to map to.
@@ -22,21 +22,21 @@ namespace AutoMapper.Attributes
         /// <summary>
         /// Creates the MapsToProperty attribute.
         /// </summary>
-        /// <param name="destinationType">The type whose property the target property will be mapped to.</param>
+        /// <param name="targetType">The type whose property the target property will be mapped to.</param>
         /// <param name="propertyName">The name of the property to map to. Supports dot notation.</param>
-        public MapsToPropertyAttribute(Type destinationType, string propertyName)
+        public MapsToPropertyAttribute(Type targetType, string propertyName)
         {
-            DestinationType = destinationType;
+            TargetType = targetType;
             PropertyName = propertyName;
         }
         
         internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
         {
-            var destinationPropertyInfo = DestinationType.FindProperties(PropertyName);
+            var destinationPropertyInfo = TargetType.FindProperties(PropertyName);
             return new PropertyMapInfo
             {
-                DestinationType = DestinationType,
-                DestinationPropertyInfo = destinationPropertyInfo.First(),
+                TargetType = TargetType,
+                TargetPropertyInfo = destinationPropertyInfo.First(),
                 SourceType = targetProperty.DeclaringType,
                 SourcePropertyInfos = new [] {targetProperty}
             };

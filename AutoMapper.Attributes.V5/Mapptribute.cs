@@ -12,19 +12,11 @@ namespace AutoMapper.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class Mapptribute : Attribute
     {
-        internal Mapptribute() {}
-        
+        internal Mapptribute() { }
+
         /// <summary>
         /// If true, mapping will be configured in reverse as well.
         /// </summary>
         public bool ReverseMap { get; set; }
-        
-        /// <summary>
-        /// Allows configuration of the mapping after mapping is done. Meant to be 
-        /// </summary>
-        /// <param name="mappingExpression"></param>
-        public virtual void ConfigureMapping(IMappingExpression mappingExpression)
-        {
-        }
     }
 }

@@ -22,7 +22,6 @@ namespace AutoMapper.Attributes
         /// </summary>
         public string PropertyName { get; }
 
-
         /// <summary>
         /// Creates the MapsFromProperty attribute.
         /// </summary>
@@ -39,8 +38,8 @@ namespace AutoMapper.Attributes
             var sourcePropertyInfo = SourceType.FindProperties(PropertyName);
             return new PropertyMapInfo
             {
-                DestinationType = targetProperty.DeclaringType,
-                DestinationPropertyInfo = targetProperty,
+                TargetType = targetProperty.DeclaringType,
+                TargetPropertyInfo = targetProperty,
                 SourceType = SourceType,
                 SourcePropertyInfos = sourcePropertyInfo.ToArray()
             };

@@ -3,7 +3,7 @@ using System;
 namespace AutoMapper.Attributes
 {
     /// <summary>
-    /// Specifies that the target class maps from the specified type. 
+    /// Specifies that the target class maps from the specified type. The attributed class is the target, the type specified is the source.
     /// </summary>
     public class MapsFromAttribute : Mapptribute
     {

@@ -1,4 +1,6 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.MapsToTests
+﻿using System;
+
+namespace AutoMapper.Attributes.V5.TestAssembly.MapsToTests
 {
     public class MapsToDestinationDataNormalAttribute : MapsToAttribute
     {
@@ -6,7 +8,8 @@
         {
         }
 
-        public override void ConfigureMapping(IMappingExpression mappingExpression)
+        [Obsolete("This was used in a previous version of the library that is no longer supported.")]
+        public void ConfigureMapping(IMappingExpression mappingExpression)
         {
             mappingExpression.ForMember(nameof(DestinationDataNormalAttribute.YetAnotherName), expression => expression.MapFrom(nameof(SourceData.Name)));
         }
