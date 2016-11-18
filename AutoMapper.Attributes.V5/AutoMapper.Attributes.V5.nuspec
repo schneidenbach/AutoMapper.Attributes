@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>AutoMapper.Attributes</id>
-    <version>$version$</version>
+    <version>5.0.0</version>
     <authors>Spencer Schneidenbach</authors>
     <owners>Spencer Schneidenbach</owners>
     <licenseUrl>https://github.com/schneidenbach/AutoMapper.Attributes/blob/master/LICENSE</licenseUrl>
@@ -17,8 +17,8 @@
 	</dependencies>
   </metadata>
   <files>
-	<file src="AutoMapper.Attributes.V5\bin\Release\AutoMapper.Attributes.dll" />
-	<file src="AutoMapper.Attributes.V5\bin\Release\AutoMapper.Attributes.xml" />
+	<file src="bin\Release\AutoMapper.Attributes.dll" target="lib\net45" />
+	<file src="bin\Release\AutoMapper.Attributes.xml" target="lib\net45" />
 	<file src="NuSpec\*.ps1" target="tools" />
   </files>
 </package>
