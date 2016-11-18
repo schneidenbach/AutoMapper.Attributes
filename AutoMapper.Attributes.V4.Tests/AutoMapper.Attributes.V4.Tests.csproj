@@ -66,11 +66,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoMapper.Attributes.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj">
+    <ProjectReference Include="..\AutoMapper.Attributes.V4.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj">
       <Project>{2807f09b-76c0-4c60-a13c-81aded284cf2}</Project>
       <Name>AutoMapper.Attributes.V4.TestAssembly</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutoMapper.Attributes\AutoMapper.Attributes.V4.csproj">
+    <ProjectReference Include="..\AutoMapper.Attributes.V4\AutoMapper.Attributes.V4.csproj">
       <Project>{a6f71cab-79cf-4a13-95d5-499ecc89c986}</Project>
       <Name>AutoMapper.Attributes.V4</Name>
     </ProjectReference>

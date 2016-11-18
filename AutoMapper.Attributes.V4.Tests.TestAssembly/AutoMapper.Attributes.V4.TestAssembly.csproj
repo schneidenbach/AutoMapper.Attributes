@@ -68,7 +68,7 @@
     <Compile Include="SubclassTests\SourceEmployee.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoMapper.Attributes\AutoMapper.Attributes.V4.csproj">
+    <ProjectReference Include="..\AutoMapper.Attributes.V4\AutoMapper.Attributes.V4.csproj">
       <Project>{a6f71cab-79cf-4a13-95d5-499ecc89c986}</Project>
       <Name>AutoMapper.Attributes.V4</Name>
     </ProjectReference>
