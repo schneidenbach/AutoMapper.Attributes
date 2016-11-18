@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper.Attributes.Tests.TestAssembly.MapsToTests;
+using AutoMapper.Attributes.Tests.TestAssembly;
+using NUnit.Framework;
+
+namespace AutoMapper.Attributes.Tests
+{
+    public class MapsToTests : MapTests
+    {
+        public MapsToTests()
+        {
+            SourceData = new SourceData
+            {
+                Name = Grandma
+            };
+        }
+        
+        public SourceData SourceData { get; }
+
+        [Test]
+        public void MapperMapsNameProperty()
+        {
+            var destination = TestMapper.Mapper.Map<DestinationData>(SourceData);
+            Assert.That(destination.Name, Is.EqualTo(Grandma));
+        }
+
+        [Test]
+        public void MapperMapsUsingGenericConfigureMethod()
+        {
+            var destination = TestMapper.Mapper.Map<DestinationDataSpecialAttribute>(SourceData);
+            Assert.That(destination.AnotherName, Is.EqualTo(Grandma));
+        }
+
+        [Test]
+        public void MapperMapsUsingNormalConfigureMethod()
+        {
+            var destination = TestMapper.Mapper.Map<DestinationDataNormalAttribute>(SourceData);
+            Assert.That(destination.YetAnotherName, Is.EqualTo(Grandma));
+        }
+    }
+}
