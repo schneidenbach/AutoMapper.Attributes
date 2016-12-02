@@ -163,7 +163,7 @@ public class MapsToCustomer : MapsToAttribute
 * You can set the ReverseMap property in the `[MapsTo]`/`[MapsFrom]` attribute to `true` if you want to map the classes in reverse as well, like this:
 
 ```csharp
-[MapsTo(typeof(Customer), true)]	//this will map Customer to Person and Person to Customer
+[MapsTo(typeof(Customer), ReverseMap = true)]	//this will map Customer to Person and Person to Customer
 public class Person {...}
 ```
 
