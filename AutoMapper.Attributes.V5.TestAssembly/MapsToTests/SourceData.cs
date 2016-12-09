@@ -5,5 +5,8 @@
     public class SourceData
     {
         public string Name { get; set; }
+
+        public int NotNullableInt { get; set; }
+        public int? SourceNullableInt { get; set; }
     }
 }

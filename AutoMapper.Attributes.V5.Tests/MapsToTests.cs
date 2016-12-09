@@ -9,7 +9,9 @@ namespace AutoMapper.Attributes.V5.Tests
         {
             SourceData = new SourceData
             {
-                Name = Grandma
+                Name = Grandma,
+                NotNullableInt = 456,
+                SourceNullableInt = 567
             };
         }
         
@@ -20,6 +22,8 @@ namespace AutoMapper.Attributes.V5.Tests
         {
             var destination = TestMapper.Mapper.Map<DestinationData>(SourceData);
             Assert.That(destination.Name, Is.EqualTo(Grandma));
+            Assert.That(destination.NullableInt, Is.EqualTo(456));
+            Assert.That(destination.TargetDestinationNonNullableInt, Is.EqualTo(567));
         }
 
         [Test]

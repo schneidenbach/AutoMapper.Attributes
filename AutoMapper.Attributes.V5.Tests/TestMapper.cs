@@ -1,15 +1,18 @@
-﻿using AutoMapper.Attributes.V5.TestAssembly.SubclassTests;
+﻿
+using AutoMapper.Attributes.V5.TestAssembly.MapsToTests;
+using AutoMapper.Attributes.V5.TestAssembly.SubclassTests;
 
 namespace AutoMapper.Attributes.V5.Tests
 {
     public static class TestMapper
     {
         public static MapperConfiguration MapperConfiguration { get; set; }
-        public static IMapper Mapper  { get; set; }
+        public static IMapper Mapper { get; set; }
 
         static TestMapper()
         {
-            MapperConfiguration = new MapperConfiguration(cfg => {
+            MapperConfiguration = new MapperConfiguration(cfg =>
+            {
                 typeof(Person).Assembly.MapTypes(cfg);
             });
 

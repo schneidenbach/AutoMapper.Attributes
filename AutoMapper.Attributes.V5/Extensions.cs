@@ -126,8 +126,7 @@ namespace AutoMapper.Attributes
 
             var mapObjectExpression = Expression.Constant(mapObject);
             var sourceTypeParameter = Expression.Parameter(sourceType);
-            var targetTypeParameter = Expression.Parameter(targetType);
-
+ 
             foreach (var propMapInfo in propertyMapInfos)
             {
                 var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
@@ -136,43 +135,35 @@ namespace AutoMapper.Attributes
                 var targetPropertyName = targetPropertyInfo.Name;
                 Debug.WriteLine($"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
                 
-                var targetMember = Expression.Lambda(
-                    Expression.Property(targetTypeParameter, targetPropertyInfo), targetTypeParameter
-                );
+                var finalSourcePropertyType = sourcePropertyInfos.Last().PropertyType;
 
-                var finalPropertyType = sourcePropertyInfos.Last().PropertyType;
                 var memberConfigType = typeof(IMemberConfigurationExpression<,,>)
-                    .MakeGenericType(sourceType, targetType, finalPropertyType);
+                    .MakeGenericType(sourceType, targetType, typeof(object));
                 var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
 
                 var propertyExpression =
                     sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null
                         ? Expression.Property(sourceTypeParameter, prop)
                         : Expression.Property(current, prop));
-
+                
                 var memberOptions = Expression.Call(memberConfigTypeParameter,
                     nameof(IMemberConfigurationExpression.MapFrom),
-                    new Type[] { finalPropertyType },
+                    new Type[] { finalSourcePropertyType },
                     Expression.Lambda(
                         propertyExpression,
                         sourceTypeParameter
-                        ));
-
-                var forMemberMethod =
-                    mapObject.GetType()
-                        .GetMethods()
-                        .Single(
-                            m =>
-                                m.Name == nameof(IMappingExpression<object, object>.ForMember) &&
-                                m.GetGenericArguments().Length == 1).MakeGenericMethod(finalPropertyType);
-
+                    ));
+                
                 var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
-                var forMemberMethodExpression = Expression.Call(
+                var forMemberMethodExpression = 
+                    Expression.Call(
                     mapObjectExpression,
-                    forMemberMethod,
-                    Expression.Constant(targetMember),
+                    nameof(IMappingExpression<object, object>.ForMember),
+                    Type.EmptyTypes,
+                    Expression.Constant(targetPropertyInfo.Name),
                     lambdaExpression);
-
+                
+                //TODO: cache this somewhere for better repeat performance
                 Expression.Lambda(forMemberMethodExpression).Compile().DynamicInvoke();
             }
 
