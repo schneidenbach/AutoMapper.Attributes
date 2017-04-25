@@ -157,34 +157,17 @@ namespace AutoMapper.Attributes
             foreach (var propMapInfo in propertyMapInfos)
             {
                 var sourceTypeParameter = Expression.Parameter(sourceType);
-                var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
                 var targetPropertyInfo = propMapInfo.TargetPropertyInfo;
 
-                var targetPropertyName = targetPropertyInfo.Name;
-                Debug.WriteLine(
-                    $"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
-
-                var finalSourcePropertyType = sourcePropertyInfos.Last().PropertyType;
 
                 var memberConfigType = typeof(IMemberConfigurationExpression<,,>)
                     .MakeGenericType(sourceType, targetType, typeof(object));
                 var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
 
-                var propertyExpression =
-                    sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null
-                        ? Expression.Property(sourceTypeParameter, prop)
-                        : Expression.Property(current, prop));
-
                 var memberOptions =
                     propMapInfo.IgnoreMapping
-                        ? Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.Ignore),
-                            Type.EmptyTypes)
-                        : Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.MapFrom),
-                            new Type[] {finalSourcePropertyType},
-                            Expression.Lambda(
-                                propertyExpression,
-                                sourceTypeParameter
-                            ));
+                        ? GetIgnoreCall(memberConfigTypeParameter)
+                        : GetMapFromCall(memberConfigTypeParameter, targetPropertyInfo, propMapInfo, sourceTypeParameter);
 
                 var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
                 var forMemberMethodExpression =
@@ -198,6 +181,34 @@ namespace AutoMapper.Attributes
                 mapObjectExpression = forMemberMethodExpression;
             }
             return mapObjectExpression;
+        }
+
+        private static MethodCallExpression GetIgnoreCall(ParameterExpression memberConfigTypeParameter)
+        {
+            return Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.Ignore),
+                Type.EmptyTypes);
+        }
+
+        private static MethodCallExpression GetMapFromCall(ParameterExpression memberConfigTypeParameter, PropertyInfo targetPropertyInfo, PropertyMapInfo propMapInfo, ParameterExpression sourceTypeParameter)
+        {
+             var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
+            var targetPropertyName = targetPropertyInfo.Name;
+
+            Debug.WriteLine(
+                $"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
+
+            var finalSourcePropertyType = sourcePropertyInfos.Last().PropertyType;
+            var propertyExpression =
+                sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null
+                    ? Expression.Property(sourceTypeParameter, prop)
+                    : Expression.Property(current, prop));
+
+            return Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.MapFrom),
+                new Type[] {finalSourcePropertyType},
+                Expression.Lambda(
+                    propertyExpression,
+                    sourceTypeParameter
+                ));
         }
 
         static Extensions()

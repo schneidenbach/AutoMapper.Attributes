@@ -39,7 +39,7 @@ namespace AutoMapper.Attributes
                 SourceType = SourceType,
                 TargetPropertyInfo = targetProperty,
                 IgnoreMapping = true,
-                SourcePropertyInfos = SourceType.FindProperties(targetProperty.Name).ToArray()
+                SourcePropertyInfos = Enumerable.Empty<PropertyInfo>().ToArray()
             };
         }
     }

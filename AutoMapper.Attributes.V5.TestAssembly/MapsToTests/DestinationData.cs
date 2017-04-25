@@ -10,5 +10,7 @@
 
         [DoNotMapPropertyFrom(typeof(SourceData))]
         public string NotMappableFrom { get; set; }
+        [DoNotMapPropertyFrom(typeof(SourceData))]
+        public string NotExistentNotMappableFrom { get; set; }
     }
 }
