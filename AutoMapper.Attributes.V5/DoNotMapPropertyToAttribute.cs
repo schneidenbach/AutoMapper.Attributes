@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace AutoMapper.Attributes
@@ -38,7 +39,14 @@ namespace AutoMapper.Attributes
 
         internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
         {
-            throw new NotImplementedException();
+            var destinationPropertyInfo = TargetType.FindProperties(PropertyName);
+            return new PropertyMapInfo
+            {
+                IgnoreMapping = true,
+                TargetType = TargetType,
+                SourceType = targetProperty.DeclaringType,
+                TargetPropertyInfo = destinationPropertyInfo.First()
+            };
         }
     }
 }

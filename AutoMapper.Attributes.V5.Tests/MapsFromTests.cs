@@ -10,9 +10,11 @@ namespace AutoMapper.Attributes.V5.Tests
         {
             var destination = TestMapper.Mapper.Map<DestinationData>(new SourceData
             {
-                Name = Grandma
+                Name = Grandma,
+                WillNotMapTo = Grandma
             });
             Assert.That(destination.Name, Is.EqualTo(Grandma));
+            Assert.That(destination.WillNotMapTo, Is.Null);
         }
 
         [Test]

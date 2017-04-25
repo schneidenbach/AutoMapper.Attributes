@@ -5,5 +5,6 @@
     public class DestinationData
     {
         public string Name { get; set; }
+        public string WillNotMapTo { get; set; }
     }
 }

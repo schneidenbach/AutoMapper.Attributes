@@ -67,36 +67,35 @@ namespace AutoMapper.Attributes
                 typesToSearch
                     .Where(sourceType.IsAssignableFrom)
                     .SelectMany(t =>
-                        new[] {
-                            t.GetProperties().Select(p => new MappingAttributesWithProperty
+                        t.GetProperties().Select(p => new MappingAttributesWithProperty
+                        {
+                            Property = p,
+                            MappingAttributes = new IEnumerable<MapsPropertyAttribute>[]
                             {
-                                Property = p,
-                                MappingAttributes =
-                                    p.GetCustomAttributes<MapsToPropertyAttribute>()
-                                        .Where(pt => pt.TargetType.IsAssignableFrom(targetType))
-                            })
+                                p.GetCustomAttributes<MapsToPropertyAttribute>()
+                                    .Where(pt => pt.TargetType.IsAssignableFrom(targetType)),
+                                t.GetCustomAttributes<DoNotMapPropertyToAttribute>()
+                                    .Where(pt => pt.PropertyName == p.Name && pt.TargetType.IsAssignableFrom(targetType))
+                            }.SelectMany(m => m)
                         })
-                    .SelectMany(p => p)
+                    )
                     .SelectMany(p => p.MappingAttributes.Select(a => a.GetPropertyMapInfo(p.Property))),
 
                 typesToSearch
                     .Where(targetType.IsAssignableFrom)
                     .SelectMany(t =>
-                        new[] {
-
-                            t.GetProperties().Select(p => new MappingAttributesWithProperty
+                        t.GetProperties().Select(p => new MappingAttributesWithProperty
+                        {
+                            Property = p,
+                            MappingAttributes = new IEnumerable<MapsPropertyAttribute>[]
                             {
-                                Property = p,
-                                MappingAttributes = new IEnumerable<MapsPropertyAttribute>[]
-                                {
-                                    p.GetCustomAttributes<DoNotMapPropertyFromAttribute>()
-                                        .Where(pt => pt.SourceType.IsAssignableFrom(sourceType)),
-                                    p.GetCustomAttributes<MapsFromPropertyAttribute>()
-                                        .Where(pt => pt.SourceType.IsAssignableFrom(sourceType))
-                                }.SelectMany(m => m)
-                            })
+                                p.GetCustomAttributes<DoNotMapPropertyFromAttribute>()
+                                    .Where(pt => pt.SourceType.IsAssignableFrom(sourceType)),
+                                p.GetCustomAttributes<MapsFromPropertyAttribute>()
+                                    .Where(pt => pt.SourceType.IsAssignableFrom(sourceType))
+                            }.SelectMany(m => m)
                         })
-                    .SelectMany(p => p)
+                    )
                     .SelectMany(p => p.MappingAttributes.Select(a => a.GetPropertyMapInfo(p.Property)))
                     .ToArray()
             }.SelectMany(p => p).ToArray();
