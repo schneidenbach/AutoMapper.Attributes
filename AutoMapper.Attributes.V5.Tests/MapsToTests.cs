@@ -11,7 +11,8 @@ namespace AutoMapper.Attributes.V5.Tests
             {
                 Name = Grandma,
                 NotNullableInt = 456,
-                SourceNullableInt = 567
+                SourceNullableInt = 567,
+                NotMappableFrom = Grandma
             };
         }
         
@@ -24,6 +25,7 @@ namespace AutoMapper.Attributes.V5.Tests
             Assert.That(destination.Name, Is.EqualTo(Grandma));
             Assert.That(destination.NullableInt, Is.EqualTo(456));
             Assert.That(destination.TargetDestinationNonNullableInt, Is.EqualTo(567));
+            Assert.That(destination.NotMappableFrom, Is.Null);
         }
 
         [Test]

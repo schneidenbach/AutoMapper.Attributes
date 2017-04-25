@@ -22,7 +22,8 @@ namespace AutoMapper.Attributes
                 {
                     Type = t,
                     MapsToAttributes = t.GetCustomAttributes(typeof(MapsToAttribute), true).Cast<MapsToAttribute>(),
-                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>()
+                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>(),
+                    
                 })
                 .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
             
@@ -66,28 +67,45 @@ namespace AutoMapper.Attributes
                 typesToSearch
                     .Where(sourceType.IsAssignableFrom)
                     .SelectMany(t =>
-                        t.GetProperties().Select(p => new
-                        {
-                            Property = p,
-                            MapsToAttributes =
-                                p.GetCustomAttributes<MapsToPropertyAttribute>()
-                                    .Where(pt => pt.TargetType.IsAssignableFrom(targetType))
-                        }))
-                    .SelectMany(p => p.MapsToAttributes.Select(a => a.GetPropertyMapInfo(p.Property))),
+                        new[] {
+                            t.GetProperties().Select(p => new MappingAttributesWithProperty
+                            {
+                                Property = p,
+                                MappingAttributes =
+                                    p.GetCustomAttributes<MapsToPropertyAttribute>()
+                                        .Where(pt => pt.TargetType.IsAssignableFrom(targetType))
+                            })
+                        })
+                    .SelectMany(p => p)
+                    .SelectMany(p => p.MappingAttributes.Select(a => a.GetPropertyMapInfo(p.Property))),
 
                 typesToSearch
                     .Where(targetType.IsAssignableFrom)
                     .SelectMany(t =>
-                        t.GetProperties().Select(p => new
-                        {
-                            Property = p,
-                            MapsToAttributes =
-                                p.GetCustomAttributes<MapsFromPropertyAttribute>()
-                                    .Where(pt => pt.SourceType.IsAssignableFrom(sourceType))
-                        }))
-                    .SelectMany(p => p.MapsToAttributes.Select(a => a.GetPropertyMapInfo(p.Property)))
+                        new[] {
+
+                            t.GetProperties().Select(p => new MappingAttributesWithProperty
+                            {
+                                Property = p,
+                                MappingAttributes = new IEnumerable<MapsPropertyAttribute>[]
+                                {
+                                    p.GetCustomAttributes<DoNotMapPropertyFromAttribute>()
+                                        .Where(pt => pt.SourceType.IsAssignableFrom(sourceType)),
+                                    p.GetCustomAttributes<MapsFromPropertyAttribute>()
+                                        .Where(pt => pt.SourceType.IsAssignableFrom(sourceType))
+                                }.SelectMany(m => m)
+                            })
+                        })
+                    .SelectMany(p => p)
+                    .SelectMany(p => p.MappingAttributes.Select(a => a.GetPropertyMapInfo(p.Property)))
                     .ToArray()
             }.SelectMany(p => p).ToArray();
+        }
+
+        internal class MappingAttributesWithProperty
+        {
+            public PropertyInfo Property { get; set; }
+            public IEnumerable<MapsPropertyAttribute> MappingAttributes { get; set; }
         }
 
         /// <summary>
@@ -95,9 +113,11 @@ namespace AutoMapper.Attributes
         /// </summary>
         private static void Mapptivate(Mapptribute mapsToAttribute, Type sourceType, Type targetType, IMapperConfigurationExpression mapperConfiguration, Type[] types, bool reverseMap)
         {
-            var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, targetType);
             var mappedProperties = GetMappedProperties(types, sourceType, targetType);
             var mappingExpression = MapTypes(sourceType, targetType, mappedProperties, mapperConfiguration);
+            
+            //if a ConfigureMapping method is defined, call it
+            var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, targetType);
             configureMappingGenericMethod?.Invoke(mapsToAttribute, new[] { mappingExpression });
 
             if (reverseMap)
@@ -121,20 +141,29 @@ namespace AutoMapper.Attributes
             var createMapMethodInfo = GenericCreateMap.MakeGenericMethod(sourceType, targetType);
 
             //actually create the mapping
-            var mapObject = createMapMethodInfo.Invoke(mapperConfiguration, new object[] { });
+            var mappingExpression = createMapMethodInfo.Invoke(mapperConfiguration, new object[] { });
             Debug.WriteLine($"Mapping created for source type {sourceType.Name} to target type {targetType.Name}");
 
-            var mapObjectExpression = Expression.Constant(mapObject);
-            var sourceTypeParameter = Expression.Parameter(sourceType);
- 
+            var mapObjectExpression = MapAllProperties(sourceType, targetType, propertyMapInfos, mappingExpression);
+            Expression.Lambda(mapObjectExpression).Compile().DynamicInvoke();
+            return mappingExpression;
+        }
+
+        private static Expression MapAllProperties(Type sourceType, Type targetType, PropertyMapInfo[] propertyMapInfos,
+            object mappingExpression)
+        {
+            Expression mapObjectExpression = Expression.Constant(mappingExpression);
+
             foreach (var propMapInfo in propertyMapInfos)
             {
+                var sourceTypeParameter = Expression.Parameter(sourceType);
                 var sourcePropertyInfos = propMapInfo.SourcePropertyInfos;
                 var targetPropertyInfo = propMapInfo.TargetPropertyInfo;
 
                 var targetPropertyName = targetPropertyInfo.Name;
-                Debug.WriteLine($"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
-                
+                Debug.WriteLine(
+                    $"-- Mapping property {string.Join(".", sourcePropertyInfos.Select(s => s.Name))} to target type {targetPropertyName}");
+
                 var finalSourcePropertyType = sourcePropertyInfos.Last().PropertyType;
 
                 var memberConfigType = typeof(IMemberConfigurationExpression<,,>)
@@ -145,29 +174,30 @@ namespace AutoMapper.Attributes
                     sourcePropertyInfos.Aggregate<PropertyInfo, Expression>(null, (current, prop) => current == null
                         ? Expression.Property(sourceTypeParameter, prop)
                         : Expression.Property(current, prop));
-                
-                var memberOptions = Expression.Call(memberConfigTypeParameter,
-                    nameof(IMemberConfigurationExpression.MapFrom),
-                    new Type[] { finalSourcePropertyType },
-                    Expression.Lambda(
-                        propertyExpression,
-                        sourceTypeParameter
-                    ));
-                
-                var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
-                var forMemberMethodExpression = 
-                    Expression.Call(
-                    mapObjectExpression,
-                    nameof(IMappingExpression<object, object>.ForMember),
-                    Type.EmptyTypes,
-                    Expression.Constant(targetPropertyInfo.Name),
-                    lambdaExpression);
-                
-                //TODO: cache this somewhere for better repeat performance
-                Expression.Lambda(forMemberMethodExpression).Compile().DynamicInvoke();
-            }
 
-            return mapObject;
+                var memberOptions =
+                    propMapInfo.IgnoreMapping
+                        ? Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.Ignore),
+                            Type.EmptyTypes)
+                        : Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.MapFrom),
+                            new Type[] {finalSourcePropertyType},
+                            Expression.Lambda(
+                                propertyExpression,
+                                sourceTypeParameter
+                            ));
+
+                var lambdaExpression = Expression.Lambda(memberOptions, memberConfigTypeParameter);
+                var forMemberMethodExpression =
+                    Expression.Call(
+                        mapObjectExpression,
+                        nameof(IMappingExpression<object, object>.ForMember),
+                        Type.EmptyTypes,
+                        Expression.Constant(targetPropertyInfo.Name),
+                        lambdaExpression);
+
+                mapObjectExpression = forMemberMethodExpression;
+            }
+            return mapObjectExpression;
         }
 
         static Extensions()

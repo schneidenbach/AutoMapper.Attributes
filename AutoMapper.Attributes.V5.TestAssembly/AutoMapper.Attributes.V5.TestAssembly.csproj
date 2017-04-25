@@ -56,6 +56,8 @@
     <Compile Include="MapsToTests\SourceData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyMapTests\Container.cs" />
+    <Compile Include="PropertyMapTests\DeepContainer.cs" />
+    <Compile Include="PropertyMapTests\DeeperContainer.cs" />
     <Compile Include="SubclassTests\Person.cs" />
     <Compile Include="SubclassTests\SourceEmployee.cs" />
     <Compile Include="SubclassTests\TargetEmployee.cs" />

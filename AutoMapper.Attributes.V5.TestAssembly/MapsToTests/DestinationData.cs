@@ -7,5 +7,8 @@
         public int? NullableInt { get; set; }
         [MapsFromProperty(typeof(SourceData), nameof(SourceData.SourceNullableInt))]
         public int TargetDestinationNonNullableInt { get; set; }
+
+        [DoNotMapPropertyFrom(typeof(SourceData))]
+        public string NotMappableFrom { get; set; }
     }
 }

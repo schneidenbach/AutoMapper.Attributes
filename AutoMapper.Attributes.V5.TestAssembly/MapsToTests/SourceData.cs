@@ -8,5 +8,6 @@
 
         public int NotNullableInt { get; set; }
         public int? SourceNullableInt { get; set; }
+        public string NotMappableFrom { get; set; }
     }
 }

@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DoNotMapPropertyToAttribute.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="DoNotMapPropertyFromAttribute.cs" />
     <Compile Include="Mapptribute.cs" />
     <Compile Include="MapsFromAttribute.cs" />
     <Compile Include="MapsFromPropertyAttribute.cs" />
     <Compile Include="MapsPropertyAttribute.cs" />
+    <Compile Include="MapsToAndFromPropertyAttribute.cs" />
     <Compile Include="MapsToAttribute.cs" />
     <Compile Include="MapsToPropertyAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

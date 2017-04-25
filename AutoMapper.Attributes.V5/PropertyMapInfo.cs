@@ -9,5 +9,6 @@ namespace AutoMapper.Attributes
         public Type SourceType { get; set; }
         public PropertyInfo TargetPropertyInfo { get; set; }
         public Type TargetType { get; set; }
+        public bool IgnoreMapping { get; set; }
     }
 }
