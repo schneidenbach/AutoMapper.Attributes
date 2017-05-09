@@ -9,5 +9,10 @@
         public string EmployeeId { get; set; }
 
         public string SocialSecurityNumber { get; set; }
+
+        [MapsToAndFromProperty(typeof(Person), nameof(Person.SomeNotes))]
+        public string Notes { get; set; }
+
+        public string Comments { get; set; }
     }
 }

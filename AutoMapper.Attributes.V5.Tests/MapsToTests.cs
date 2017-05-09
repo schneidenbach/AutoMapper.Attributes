@@ -26,6 +26,7 @@ namespace AutoMapper.Attributes.V5.Tests
             Assert.That(destination.NullableInt, Is.EqualTo(456));
             Assert.That(destination.TargetDestinationNonNullableInt, Is.EqualTo(567));
             Assert.That(destination.NotMappableFrom, Is.Null);
+            Assert.That(destination.NotExistentNotMappableFrom, Is.Null);
         }
 
         [Test]

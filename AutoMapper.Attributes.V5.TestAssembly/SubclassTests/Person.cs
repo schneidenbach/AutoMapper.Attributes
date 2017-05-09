@@ -6,5 +6,10 @@
 
         [MapsFromProperty(typeof(SourceEmployee), "SocialSecurityNumber")]
         public string Ssn { get; set; }
+        
+        public string SomeNotes { get; set; }
+
+        [MapsToAndFromProperty(typeof(SourceEmployee), nameof(SourceEmployee.Comments))]
+        public string SomeComments { get; set; }
     }
 }

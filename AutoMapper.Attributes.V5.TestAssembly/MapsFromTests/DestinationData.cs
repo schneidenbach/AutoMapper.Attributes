@@ -6,5 +6,6 @@
     {
         public string Name { get; set; }
         public string WillNotMapTo { get; set; }
+        public string WillAlsoNotMapTo { get; set; }
     }
 }

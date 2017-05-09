@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace AutoMapper.Attributes
@@ -12,6 +13,6 @@ namespace AutoMapper.Attributes
     {
         internal MapsPropertyAttribute() {}
 
-        internal abstract PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty);
+        internal abstract IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType = null);
     }
 }

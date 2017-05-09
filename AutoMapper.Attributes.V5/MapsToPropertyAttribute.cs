@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -30,10 +31,10 @@ namespace AutoMapper.Attributes
             PropertyName = propertyName;
         }
         
-        internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
+        internal override IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType = null)
         {
             var destinationPropertyInfo = TargetType.FindProperties(PropertyName);
-            return new PropertyMapInfo
+            yield return new PropertyMapInfo
             {
                 TargetType = TargetType,
                 TargetPropertyInfo = destinationPropertyInfo.First(),

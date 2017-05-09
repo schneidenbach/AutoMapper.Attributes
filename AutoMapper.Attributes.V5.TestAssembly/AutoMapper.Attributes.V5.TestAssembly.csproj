@@ -49,6 +49,8 @@
     <Compile Include="MapsFromTests\SourceData.cs" />
     <Compile Include="MapsFromTests\SourceDataNormalAttribute.cs" />
     <Compile Include="MapsFromTests\SourceDataSpecialAttribute.cs" />
+    <Compile Include="MapsToAndFromTests\DestinationData.cs" />
+    <Compile Include="MapsToAndFromTests\SourceData.cs" />
     <Compile Include="MapsToTests\DestinationData.cs" />
     <Compile Include="MapsToTests\DestinationDataNormalAttribute.cs" />
     <Compile Include="MapsToTests\DestinationDataSpecialAttribute.cs" />

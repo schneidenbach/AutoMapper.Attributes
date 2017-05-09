@@ -8,15 +8,12 @@ namespace AutoMapper.Attributes.V5.Tests
         [Test]
         public void TestMapToProperty()
         {
-            var deep = new DeepContainer
+            var deeperContainer = new DeeperContainer
             {
-                DeeperContainer = new DeeperContainer
-                {
-                    Name = Grandma
-                }
+                Name = Grandma
             };
 
-            var container = TestMapper.Mapper.Map<Container>(deep.DeeperContainer);
+            var container = TestMapper.Mapper.Map<Container>(deeperContainer);
             Assert.That(container.DeeperContainersName, Is.EqualTo(Grandma));
         }
 

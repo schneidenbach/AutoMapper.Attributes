@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -27,26 +28,51 @@ namespace AutoMapper.Attributes
         public string PropertyName { get; }
 
         /// <summary>
+        /// Gets the additional properties to ignore.
+        /// </summary>
+        /// <value>
+        /// The additional properties to ignore.
+        /// </value>
+        public string[] AdditionalProperties { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DoNotMapPropertyToAttribute"/> class.
         /// </summary>
         /// <param name="targetType">The target type containing the property to ignore.</param>
-        /// <param name="propertyName">The name of the property to ignore on the garget type.</param>
-        public DoNotMapPropertyToAttribute(Type targetType, string propertyName)
+        /// <param name="propertyName">The name of the property to ignore on the target type.</param>
+        /// <param name="additionalProperties">The names of additional properties to ignore on the target type.</param>
+        public DoNotMapPropertyToAttribute(Type targetType, string propertyName, params string[] additionalProperties)
         {
             TargetType = targetType;
             PropertyName = propertyName;
+            AdditionalProperties = additionalProperties;
         }
 
-        internal override PropertyMapInfo GetPropertyMapInfo(PropertyInfo targetProperty)
+        internal override IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType)
         {
             var destinationPropertyInfo = TargetType.FindProperties(PropertyName);
-            return new PropertyMapInfo
+            yield return new PropertyMapInfo
             {
                 IgnoreMapping = true,
                 TargetType = TargetType,
                 SourceType = targetProperty.DeclaringType,
                 TargetPropertyInfo = destinationPropertyInfo.First()
             };
+
+            if (AdditionalProperties != null)
+            {
+                foreach (var prop in AdditionalProperties)
+                {
+                    var targetPropertyInfo = TargetType.FindProperties(prop);
+                    yield return new PropertyMapInfo
+                    {
+                        IgnoreMapping = true,
+                        TargetType = TargetType,
+                        SourceType = targetProperty.DeclaringType,
+                        TargetPropertyInfo = targetPropertyInfo.First()
+                    };
+                }
+            }
         }
     }
 }
