@@ -33,5 +33,22 @@ namespace AutoMapper.Attributes
             if (propertyInfo == null)
                 throw new ArgumentOutOfRangeException(nameof(name), $"Property name {name} is not valid.");
         }
+
+#if NETSTANDARD1_3
+        public static bool IsAssignableFrom(this Type type, Type possibleSubType)
+        {
+            return type.GetTypeInfo().IsSubclassOf(possibleSubType);
+        }
+
+        public static IEnumerable<Attribute> GetCustomAttributes(this Type type, Type attributeType, bool inherit)
+        {
+            return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit);
+        }
+
+        public static IEnumerable<T> GetCustomAttributes<T>(this Type type) where T : Attribute
+        {
+            return type.GetTypeInfo().GetCustomAttributes<T>();
+        }
+#endif
     }
 }
