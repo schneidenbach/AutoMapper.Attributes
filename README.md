@@ -24,7 +24,7 @@ public class Program
     public void Main()
     {
         AutoMapper.Mapper.Initialize(config => {
-            typeof(Program).Assembly.MapTypes(config);
+            typeof(Program).Assembly.MapTypes(config);      //or use typeof(Program).GetTypeInfo().Assembly if using .NET Standard
         });
         
         var person = new Person { FirstName = "John", LastName = "Lackey" };
