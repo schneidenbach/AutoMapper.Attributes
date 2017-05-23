@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutoMapper.Attributes.V5.TestAssembly.MapsFromTests
+namespace AutoMapper.Attributes.TestAssembly.MapsFromTests
 {
     public class MapsFromSourceDataNormalAttribute : MapsFromAttribute
     {

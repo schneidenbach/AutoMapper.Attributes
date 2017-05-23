@@ -1,4 +1,4 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.PropertyMapTests
+﻿namespace AutoMapper.Attributes.TestAssembly.PropertyMapTests
 {
     [IgnoreMapToProperties(typeof(Container), nameof(Container.DeepContainer), nameof(Container.DeeperContainersName))]
     public class DeepContainer

@@ -1,4 +1,4 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.SubclassTests
+﻿namespace AutoMapper.Attributes.TestAssembly.SubclassTests
 {
     public abstract class Person
     {

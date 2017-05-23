@@ -1,4 +1,4 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.MapsToAndFromTests
+﻿namespace AutoMapper.Attributes.TestAssembly.MapsToAndFromTests
 {
     public class SourceData
     {

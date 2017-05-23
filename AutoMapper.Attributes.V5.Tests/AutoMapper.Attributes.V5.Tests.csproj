@@ -1,84 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{88549130-4D76-46EC-B951-10C0E29AA3B9}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoMapper.Attributes.V5.Tests</RootNamespace>
-    <AssemblyName>AutoMapper.Attributes.V5.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>netstandard1.6;net46</TargetFrameworks>
+    <AssemblyName>AutoMapper.Attributes.Tests</AssemblyName>
+    <RootNamespace>AutoMapper.Attributes.Tests</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="AutoMapper" Version="5.0.2" />
+    <PackageReference Include="NUnit" Version="3.6.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="MappingValidatorTests.cs" />
-    <Compile Include="MapsFromPropertyTests.cs" />
-    <Compile Include="MapsFromTests.cs" />
-    <Compile Include="MapsToAndFromPropertyTests.cs" />
-    <Compile Include="MapsToPropertyTests.cs" />
-    <Compile Include="MapsToTests.cs" />
-    <Compile Include="MapTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubclassTests.cs" />
-    <Compile Include="TestMapper.cs" />
+    <ProjectReference Include="..\AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj" />
+    <ProjectReference Include="..\AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj">
-      <Project>{7c9daba1-2b33-42e9-9a2c-102da12e7e09}</Project>
-      <Name>AutoMapper.Attributes.V5.TestAssembly</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj">
-      <Project>{6a6191b1-fea5-4a40-a01a-6497eb452d92}</Project>
-      <Name>AutoMapper.Attributes.V5</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

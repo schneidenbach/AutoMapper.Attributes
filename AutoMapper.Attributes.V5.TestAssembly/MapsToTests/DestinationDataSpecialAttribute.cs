@@ -1,4 +1,4 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.MapsToTests
+﻿namespace AutoMapper.Attributes.TestAssembly.MapsToTests
 {
     public class DestinationDataSpecialAttribute
     {

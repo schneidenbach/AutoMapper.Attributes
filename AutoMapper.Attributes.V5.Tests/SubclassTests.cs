@@ -1,7 +1,7 @@
-﻿using AutoMapper.Attributes.V5.TestAssembly.SubclassTests;
+﻿using AutoMapper.Attributes.TestAssembly.SubclassTests;
 using NUnit.Framework;
 
-namespace AutoMapper.Attributes.V5.Tests
+namespace AutoMapper.Attributes.Tests
 {
     public class SubclassTests : MapTests
     {

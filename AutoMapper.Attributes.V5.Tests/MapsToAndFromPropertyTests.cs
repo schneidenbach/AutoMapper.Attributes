@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper.Attributes.V5.TestAssembly.MapsToAndFromTests;
+﻿using AutoMapper.Attributes.TestAssembly.MapsToAndFromTests;
 using NUnit.Framework;
 
-namespace AutoMapper.Attributes.V5.Tests
+namespace AutoMapper.Attributes.Tests
 {
     public class MapsToAndFromPropertyTests : MapTests
     {

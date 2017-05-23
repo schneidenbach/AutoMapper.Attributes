@@ -1,4 +1,4 @@
-﻿namespace AutoMapper.Attributes.V5.TestAssembly.MapsFromTests
+﻿namespace AutoMapper.Attributes.TestAssembly.MapsFromTests
 {
     [IgnoreMapToProperties(typeof(DestinationData), nameof(DestinationData.WillAlsoNotMapTo))]
     public class SourceData

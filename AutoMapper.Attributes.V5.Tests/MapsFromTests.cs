@@ -1,7 +1,7 @@
-﻿using AutoMapper.Attributes.V5.TestAssembly.MapsFromTests;
+﻿using AutoMapper.Attributes.TestAssembly.MapsFromTests;
 using NUnit.Framework;
 
-namespace AutoMapper.Attributes.V5.Tests
+namespace AutoMapper.Attributes.Tests
 {
     public class MapsFromTests : MapTests
     {

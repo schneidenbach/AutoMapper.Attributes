@@ -1,4 +1,4 @@
-namespace AutoMapper.Attributes.V5.TestAssembly.PropertyMapTests
+namespace AutoMapper.Attributes.TestAssembly.PropertyMapTests
 {
     [MapsTo(typeof(Container))]
     public class DeeperContainer

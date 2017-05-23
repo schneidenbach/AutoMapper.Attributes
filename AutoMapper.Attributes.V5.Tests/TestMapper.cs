@@ -1,8 +1,7 @@
-﻿
-using AutoMapper.Attributes.V5.TestAssembly.MapsToTests;
-using AutoMapper.Attributes.V5.TestAssembly.SubclassTests;
+﻿using System.Reflection;
+using AutoMapper.Attributes.TestAssembly.SubclassTests;
 
-namespace AutoMapper.Attributes.V5.Tests
+namespace AutoMapper.Attributes.Tests
 {
     public static class TestMapper
     {
@@ -13,7 +12,7 @@ namespace AutoMapper.Attributes.V5.Tests
         {
             MapperConfiguration = new MapperConfiguration(cfg =>
             {
-                typeof(Person).Assembly.MapTypes(cfg);
+                typeof(Person).GetTypeInfo().Assembly.MapTypes(cfg);
             });
 
             Mapper = MapperConfiguration.CreateMapper();

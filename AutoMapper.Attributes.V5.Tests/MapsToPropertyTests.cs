@@ -1,7 +1,7 @@
-using AutoMapper.Attributes.V5.TestAssembly.PropertyMapTests;
+using AutoMapper.Attributes.TestAssembly.PropertyMapTests;
 using NUnit.Framework;
 
-namespace AutoMapper.Attributes.V5.Tests
+namespace AutoMapper.Attributes.Tests
 {
     public class MapsToPropertyTests : MapTests
     {
