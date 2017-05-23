@@ -8,9 +8,9 @@
         [MapsFromProperty(typeof(SourceData), nameof(SourceData.SourceNullableInt))]
         public int TargetDestinationNonNullableInt { get; set; }
 
-        [IgnorePropertyFrom(typeof(SourceData))]
+        [IgnoreMapFrom(typeof(SourceData))]
         public string NotMappableFrom { get; set; }
-        [IgnorePropertyFrom(typeof(SourceData))]
+        [IgnoreMapFrom(typeof(SourceData))]
         public string NotExistentNotMappableFrom { get; set; }
     }
 }

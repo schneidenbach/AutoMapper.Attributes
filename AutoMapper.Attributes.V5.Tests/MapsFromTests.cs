@@ -15,14 +15,24 @@ namespace AutoMapper.Attributes.V5.Tests
                 WillAlsoNotMapTo = Grandma
             });
             Assert.That(destination.Name, Is.EqualTo(Grandma));
-            Assert.That(destination.WillNotMapTo, Is.Null);
+        }
+
+        [Test]
+        public void MapperDoesNotMapWillNotMapToProperties()
+        {
+            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceData
+            {
+                Name = Grandma,
+                WillNotMapTo = Grandma,
+                WillAlsoNotMapTo = Grandma
+            });
             Assert.That(destination.WillAlsoNotMapTo, Is.Null);
         }
 
         [Test]
         public void MapperMapsUsingGenericConfigureMethod()
         {
-            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceDataSpecialAttribute
+            var destination = TestMapper.Mapper.Map<DestinationData>(new SourceDataForTheSpecialAttribute
             {
                 AnotherName = Grandma
             });

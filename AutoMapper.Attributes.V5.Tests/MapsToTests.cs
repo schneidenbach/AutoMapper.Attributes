@@ -35,5 +35,17 @@ namespace AutoMapper.Attributes.V5.Tests
             var destination = TestMapper.Mapper.Map<DestinationDataSpecialAttribute>(SourceData);
             Assert.That(destination.AnotherName, Is.EqualTo(Grandma));
         }
+
+        [Test]
+        public void MapperDoesNotMapWillNotMapToPropertyWithIgnoreMapToAttribute()
+        {
+            var destination = TestMapper.Mapper.Map<TestAssembly.MapsFromTests.DestinationData>(new TestAssembly.MapsFromTests.SourceData
+            {
+                Name = Grandma,
+                WillNotMapTo = Grandma,
+                WillAlsoNotMapTo = Grandma
+            });
+            Assert.That(destination.WillNotMapTo, Is.Null);
+        }
     }
 }

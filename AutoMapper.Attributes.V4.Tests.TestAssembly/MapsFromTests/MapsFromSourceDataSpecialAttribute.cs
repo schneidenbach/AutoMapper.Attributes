@@ -8,7 +8,8 @@
 
         public void ConfigureMapping(IMappingExpression<SourceDataSpecialAttribute, DestinationData> mappingExpression)
         {
-            mappingExpression.ForMember(d => d.Name, expression => expression.MapFrom(s => s.AnotherName));
+            mappingExpression
+                .ForMember(d => d.Name, expression => expression.MapFrom(s => s.AnotherName));
         }
     }
 }

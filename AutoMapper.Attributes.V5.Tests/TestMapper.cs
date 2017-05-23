@@ -14,12 +14,9 @@ namespace AutoMapper.Attributes.V5.Tests
             MapperConfiguration = new MapperConfiguration(cfg =>
             {
                 typeof(Person).Assembly.MapTypes(cfg);
-                cfg.CreateMap<DestinationData, SourceData>()
-                    .ForMember(c => c.Name, expression => expression.Ignore());
             });
 
             Mapper = MapperConfiguration.CreateMapper();
-            //MapperConfiguration.AssertConfigurationIsValid();
         }
     }
 }

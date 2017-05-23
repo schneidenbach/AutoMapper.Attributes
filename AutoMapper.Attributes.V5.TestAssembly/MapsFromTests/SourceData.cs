@@ -1,6 +1,6 @@
 ﻿namespace AutoMapper.Attributes.V5.TestAssembly.MapsFromTests
 {
-    [DoNotMapPropertyTo(typeof(DestinationData), nameof(DestinationData.WillNotMapTo), nameof(DestinationData.WillAlsoNotMapTo))]
+    [IgnoreMapToProperties(typeof(DestinationData), nameof(DestinationData.WillAlsoNotMapTo))]
     public class SourceData
     {
         public string Name { get; set; }

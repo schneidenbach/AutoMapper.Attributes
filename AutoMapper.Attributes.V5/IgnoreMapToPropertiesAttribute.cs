@@ -6,10 +6,10 @@ using System.Reflection;
 namespace AutoMapper.Attributes
 {
     /// <summary>
-    /// Specifies that this type will not attempt to map a property to a given type.
+    /// Specifies that this type will not attempt to map one or more properties to a given type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class DoNotMapPropertyToAttribute : MapsPropertyAttribute
+    public class IgnoreMapToPropertiesAttribute : MapsPropertyAttribute
     {
         /// <summary>
         /// Gets the target type.
@@ -36,12 +36,12 @@ namespace AutoMapper.Attributes
         public string[] AdditionalProperties { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DoNotMapPropertyToAttribute"/> class.
+        /// Initializes a new instance of the <see cref="IgnoreMapToPropertiesAttribute"/> class.
         /// </summary>
         /// <param name="targetType">The target type containing the property to ignore.</param>
         /// <param name="propertyName">The name of the property to ignore on the target type.</param>
         /// <param name="additionalProperties">The names of additional properties to ignore on the target type.</param>
-        public DoNotMapPropertyToAttribute(Type targetType, string propertyName, params string[] additionalProperties)
+        public IgnoreMapToPropertiesAttribute(Type targetType, string propertyName, params string[] additionalProperties)
         {
             TargetType = targetType;
             PropertyName = propertyName;

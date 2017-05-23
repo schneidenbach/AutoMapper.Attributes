@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoMapper.Attributes.V5.Tests</RootNamespace>
     <AssemblyName>AutoMapper.Attributes.V5.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MappingValidatorTests.cs" />
     <Compile Include="MapsFromPropertyTests.cs" />
     <Compile Include="MapsFromTests.cs" />
     <Compile Include="MapsToAndFromPropertyTests.cs" />

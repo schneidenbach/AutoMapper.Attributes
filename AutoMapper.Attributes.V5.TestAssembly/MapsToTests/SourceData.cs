@@ -6,7 +6,9 @@
     {
         public string Name { get; set; }
 
+        [IgnoreMapFrom(typeof(DestinationData))]
         public int NotNullableInt { get; set; }
+        [IgnoreMapFrom(typeof(DestinationData))]
         public int? SourceNullableInt { get; set; }
         public string NotMappableFrom { get; set; }
     }

@@ -12,7 +12,7 @@ namespace AutoMapper.Attributes
     /// Specifies that this property will not be mapped from the given type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class IgnorePropertyFrom : MapsPropertyAttribute
+    public class IgnoreMapFromAttribute : MapsPropertyAttribute
     {
         /// <summary>
         /// Gets the source type.
@@ -23,15 +23,15 @@ namespace AutoMapper.Attributes
         public Type SourceType { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IgnorePropertyFrom"/> class.
+        /// Initializes a new instance of the <see cref="IgnoreMapFromAttribute"/> class.
         /// </summary>
         /// <param name="sourceType">The source type containing the property the mapper will ignore.</param>
-        public IgnorePropertyFrom(Type sourceType)
+        public IgnoreMapFromAttribute(Type sourceType)
         {
             SourceType = sourceType;
         }
 
-        internal override IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType)
+        internal override IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType = null)
         {
             yield return new PropertyMapInfo
             {

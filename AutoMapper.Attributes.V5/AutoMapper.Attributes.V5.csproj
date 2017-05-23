@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoMapper.Attributes</RootNamespace>
     <AssemblyName>AutoMapper.Attributes</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,9 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoNotMapPropertyToAttribute.cs" />
+    <Compile Include="IgnoreMapToPropertiesAttribute.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IgnorePropertyFrom.cs" />
+    <Compile Include="IgnoreMapFromAttribute.cs" />
     <Compile Include="Mapptribute.cs" />
     <Compile Include="MapsFromAttribute.cs" />
     <Compile Include="MapsFromPropertyAttribute.cs" />

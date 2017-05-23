@@ -34,8 +34,6 @@ namespace AutoMapper.Attributes
 
         internal override IEnumerable<PropertyMapInfo> GetPropertyMapInfo(PropertyInfo targetProperty, Type sourceType = null)
         {
-            var propName = targetProperty.Name;
-            //this if is probably wrong
             if (targetProperty.DeclaringType.IsAssignableFrom(sourceType) == true)
             {
                 var sourcePropertyInfo = SourceOrTargetType.FindProperties(PropertyName);
