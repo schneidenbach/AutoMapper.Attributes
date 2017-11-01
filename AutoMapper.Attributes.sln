@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj", "{6A6191B1-FEA5-4A40-A01A-6497EB452D92}"
 EndProject
@@ -15,11 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.TestAssembly", "AutoMapper.Attributes.V4.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj", "{2807F09B-76C0-4C60-A13C-81ADED284CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V6", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V6.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6.TestAssembly", "AutoMapper.Attributes.V6.TestAssembly\AutoMapper.Attributes.V6.TestAssembly.csproj", "{D3DB4EAD-4FAD-406F-BAC9-0E936636B67A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6.Tests", "AutoMapper.Attributes.V6.Tests\AutoMapper.Attributes.V6.Tests.csproj", "{D34E449E-9663-4521-BDC8-FCC7CBFD4767}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V6.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,14 +51,6 @@ Global
 		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3DB4EAD-4FAD-406F-BAC9-0E936636B67A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3DB4EAD-4FAD-406F-BAC9-0E936636B67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3DB4EAD-4FAD-406F-BAC9-0E936636B67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3DB4EAD-4FAD-406F-BAC9-0E936636B67A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D34E449E-9663-4521-BDC8-FCC7CBFD4767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D34E449E-9663-4521-BDC8-FCC7CBFD4767}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D34E449E-9663-4521-BDC8-FCC7CBFD4767}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D34E449E-9663-4521-BDC8-FCC7CBFD4767}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
