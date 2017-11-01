@@ -1,19 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj", "{6A6191B1-FEA5-4A40-A01A-6497EB452D92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj", "{6A6191B1-FEA5-4A40-A01A-6497EB452D92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V5.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{88549130-4D76-46EC-B951-10C0E29AA3B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V5.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{88549130-4D76-46EC-B951-10C0E29AA3B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4", "AutoMapper.Attributes.V4\AutoMapper.Attributes.V4.csproj", "{A6F71CAB-79CF-4A13-95D5-499ECC89C986}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.Tests", "AutoMapper.Attributes.V4.Tests\AutoMapper.Attributes.V4.Tests.csproj", "{B64D9F5E-798E-40D0-903A-922D0D1D0480}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.TestAssembly", "AutoMapper.Attributes.V4.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj", "{2807F09B-76C0-4C60-A13C-81ADED284CF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V6.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{2807F09B-76C0-4C60-A13C-81ADED284CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2807F09B-76C0-4C60-A13C-81ADED284CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2807F09B-76C0-4C60-A13C-81ADED284CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46987B3A-30A3-47D4-9F68-9DE43D665517}
 	EndGlobalSection
 EndGlobal
