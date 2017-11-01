@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.0.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
@@ -21,6 +24,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk">
+      <Version>15.3.0</Version>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
