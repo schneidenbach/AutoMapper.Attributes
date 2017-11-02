@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace AutoMapper.Attributes
         public static void MapTypes(this Assembly assembly, IMapperConfigurationExpression mapperConfiguration)
         {
             var assemblyTypes = assembly.GetTypes();
-            var mappedTypes = 
+            var mappedTypes =
                 assemblyTypes.Select(t => new
                 {
                     Type = t,
@@ -25,7 +25,7 @@ namespace AutoMapper.Attributes
                     MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>(),
                 })
                 .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
-            
+
             foreach (var type in mappedTypes)
             {
                 ProcessMapsToAttributes(type.Type, type.MapsToAttributes, mapperConfiguration, assemblyTypes);
@@ -34,9 +34,9 @@ namespace AutoMapper.Attributes
         }
 
         private static void ProcessMapsFromAttributes(
-            Type targetType, 
-            IEnumerable<MapsFromAttribute> mapsFromAttributes, 
-            IMapperConfigurationExpression mapperConfiguration, 
+            Type targetType,
+            IEnumerable<MapsFromAttribute> mapsFromAttributes,
+            IMapperConfigurationExpression mapperConfiguration,
             Type[] types)
         {
             foreach (var mapsFromAttribute in mapsFromAttributes)
@@ -45,11 +45,11 @@ namespace AutoMapper.Attributes
                 Mapptivate(mapsFromAttribute, sourceType, targetType, mapperConfiguration, types, mapsFromAttribute.ReverseMap);
             }
         }
-        
+
         private static void ProcessMapsToAttributes(
-            Type sourceType, 
-            IEnumerable<MapsToAttribute> mapsToAttributes, 
-            IMapperConfigurationExpression mapperConfiguration, 
+            Type sourceType,
+            IEnumerable<MapsToAttribute> mapsToAttributes,
+            IMapperConfigurationExpression mapperConfiguration,
             Type[] types)
         {
             foreach (var mapsToAttribute in mapsToAttributes)
@@ -105,7 +105,7 @@ namespace AutoMapper.Attributes
         {
             return possibleSourceTypes
                 .SelectMany(t =>
-                    t.GetProperties().Select(p => new 
+                    t.GetProperties().Select(p => new
                     {
                         Property = p,
                         MappingAttributes = new IEnumerable<MapsPropertyAttribute>[]
@@ -122,7 +122,7 @@ namespace AutoMapper.Attributes
                 .SelectMany(p => p.MappingAttributes.SelectMany(a => a.GetPropertyMapInfo(p.Property)))
                 .ToArray();
         }
-        
+
         /// <summary>
         /// All these map puns are giving me a headache.
         /// </summary>
@@ -130,7 +130,7 @@ namespace AutoMapper.Attributes
         {
             var mappedProperties = GetMappedProperties(types, sourceType, targetType);
             var mappingExpression = MapTypes(sourceType, targetType, mappedProperties, mapperConfiguration);
-            
+
             //if a ConfigureMapping method is defined, call it
             var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, targetType);
             configureMappingGenericMethod?.Invoke(mapsToAttribute, new[] { mappingExpression });
@@ -172,13 +172,13 @@ namespace AutoMapper.Attributes
             {
                 var sourceTypeParameter = Expression.Parameter(sourceType);
                 var targetPropertyInfo = propMapInfo.TargetPropertyInfo;
-                
-                var memberConfigType = 
-                    propMapInfo.UseSourceMember 
+
+                var memberConfigType =
+                    propMapInfo.UseSourceMember
                         ? typeof(ISourceMemberConfigurationExpression)
                         : typeof(IMemberConfigurationExpression<,,>).MakeGenericType(sourceType, targetType, typeof(object));
                 var memberConfigTypeParameter = Expression.Parameter(memberConfigType);
-                
+
                 var forMemberMethodName =
                     propMapInfo.UseSourceMember
                         ? nameof(IMappingExpression<object, object>.ForSourceMember)
@@ -224,7 +224,7 @@ namespace AutoMapper.Attributes
                     : Expression.Property(current, prop));
 
             return Expression.Call(memberConfigTypeParameter, nameof(IMemberConfigurationExpression.MapFrom),
-                new Type[] {finalSourcePropertyType},
+                new Type[] { finalSourcePropertyType },
                 Expression.Lambda(
                     propertyExpression,
                     sourceTypeParameter

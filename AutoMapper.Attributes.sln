@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.TestAssembly", "AutoMapper.Attributes.V4.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj", "{2807F09B-76C0-4C60-A13C-81ADED284CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V5.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V6.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{5C2782CE-A083-43B8-B55B-E40D211DA92F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V5.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{5C2782CE-A083-43B8-B55B-E40D211DA92F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V6.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{564B07E6-8CF2-47D2-9FD5-DCFC1FB292B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{564B07E6-8CF2-47D2-9FD5-DCFC1FB292B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
