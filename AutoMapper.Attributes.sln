@@ -3,23 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj", "{6A6191B1-FEA5-4A40-A01A-6497EB452D92}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V5.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{88549130-4D76-46EC-B951-10C0E29AA3B9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4", "AutoMapper.Attributes.V4\AutoMapper.Attributes.V4.csproj", "{A6F71CAB-79CF-4A13-95D5-499ECC89C986}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.Tests", "AutoMapper.Attributes.V4.Tests\AutoMapper.Attributes.V4.Tests.csproj", "{B64D9F5E-798E-40D0-903A-922D0D1D0480}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V4.TestAssembly", "AutoMapper.Attributes.V4.Tests.TestAssembly\AutoMapper.Attributes.V4.TestAssembly.csproj", "{2807F09B-76C0-4C60-A13C-81ADED284CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V6", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V6.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5", "AutoMapper.Attributes.V6\AutoMapper.Attributes.V5.csproj", "{9C51EF85-3A7B-48BF-9D3E-464FF9352D3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6.Tests", "AutoMapper.Attributes.V6.Tests\AutoMapper.Attributes.V6.Tests.csproj", "{5C2782CE-A083-43B8-B55B-E40D211DA92F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.Tests", "AutoMapper.Attributes.V6.Tests\AutoMapper.Attributes.V5.Tests.csproj", "{5C2782CE-A083-43B8-B55B-E40D211DA92F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper.Attributes.V6.TestAssembly", "AutoMapper.Attributes.V6.TestAssembly\AutoMapper.Attributes.V6.TestAssembly.csproj", "{564B07E6-8CF2-47D2-9FD5-DCFC1FB292B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapper.Attributes.V5.TestAssembly", "AutoMapper.Attributes.V6.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj", "{564B07E6-8CF2-47D2-9FD5-DCFC1FB292B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,18 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6A6191B1-FEA5-4A40-A01A-6497EB452D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A6191B1-FEA5-4A40-A01A-6497EB452D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A6191B1-FEA5-4A40-A01A-6497EB452D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A6191B1-FEA5-4A40-A01A-6497EB452D92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88549130-4D76-46EC-B951-10C0E29AA3B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88549130-4D76-46EC-B951-10C0E29AA3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88549130-4D76-46EC-B951-10C0E29AA3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88549130-4D76-46EC-B951-10C0E29AA3B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C9DABA1-2B33-42E9-9A2C-102DA12E7E09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6F71CAB-79CF-4A13-95D5-499ECC89C986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6F71CAB-79CF-4A13-95D5-499ECC89C986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6F71CAB-79CF-4A13-95D5-499ECC89C986}.Release|Any CPU.ActiveCfg = Release|Any CPU

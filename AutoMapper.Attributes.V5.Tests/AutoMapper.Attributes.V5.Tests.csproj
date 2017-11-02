@@ -17,9 +17,4 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AutoMapper.Attributes.V5.TestAssembly\AutoMapper.Attributes.V5.TestAssembly.csproj" />
-    <ProjectReference Include="..\AutoMapper.Attributes.V5\AutoMapper.Attributes.V5.csproj" />
-  </ItemGroup>
-
 </Project>
