@@ -234,7 +234,7 @@ namespace AutoMapper.Attributes
 
             if (configureMappingGenericMethod == null)
             {
-                var map = mapperConfiguration == null ? Mapper.CreateMap(sourceType, destinationType) : mapperConfiguration.CreateMap(sourceType, destinationType);
+                var map = mapperConfiguration == null ? Mapper.CreateMap(sourceType, destinationType, mapsToAttribute.MemberList) : mapperConfiguration.CreateMap(sourceType, destinationType, mapsToAttribute.MemberList);
                 mapsToAttribute.ConfigureMapping(map);
             }
             else
