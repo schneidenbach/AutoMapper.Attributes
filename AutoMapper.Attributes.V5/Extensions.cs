@@ -129,7 +129,7 @@ namespace AutoMapper.Attributes
         internal static void Mapptivate(Mapptribute mapsToAttribute, Type sourceType, Type targetType, IMapperConfigurationExpression mapperConfiguration, Type[] types, bool reverseMap)
         {
             var mappedProperties = GetMappedProperties(types, sourceType, targetType);
-            var mappingExpression = MapTypes(sourceType, targetType, mappedProperties, mapperConfiguration);
+            var mappingExpression = MapTypes(sourceType, targetType, mappedProperties, mapperConfiguration, mapsToAttribute.MemberList);
             
             //if a ConfigureMapping method is defined, call it
             var configureMappingGenericMethod = GetConfigureMappingGenericMethod(mapsToAttribute, sourceType, targetType);
@@ -151,12 +151,13 @@ namespace AutoMapper.Attributes
         internal static object MapTypes(Type sourceType,
             Type targetType,
             PropertyMapInfo[] propertyMapInfos,
-            IMapperConfigurationExpression mapperConfiguration)
+            IMapperConfigurationExpression mapperConfiguration,
+            MemberList memberList)
         {
             var createMapMethodInfo = GenericCreateMap.MakeGenericMethod(sourceType, targetType);
 
             //actually create the mapping
-            var mappingExpression = createMapMethodInfo.Invoke(mapperConfiguration, new object[] { });
+            var mappingExpression = createMapMethodInfo.Invoke(mapperConfiguration, new object[] { memberList });
             Debug.WriteLine($"Mapping created for source type {sourceType.Name} to target type {targetType.Name}");
 
             var mapObjectExpression = MapProperties(sourceType, targetType, propertyMapInfos, mappingExpression);
@@ -238,7 +239,7 @@ namespace AutoMapper.Attributes
                     .Single(m => m.Name == nameof(IMapperConfigurationExpression.CreateMap) &&
                                  m.IsGenericMethodDefinition &&
                                  m.GetGenericArguments().Length == 2 &&
-                                 !m.GetParameters().Any());
+                                 m.GetParameters().Length == 1);
         }
 
         private static MethodInfo GenericCreateMap { get; }
