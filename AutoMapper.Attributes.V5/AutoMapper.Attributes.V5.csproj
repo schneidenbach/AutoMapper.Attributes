@@ -6,7 +6,7 @@
     <RootNamespace>AutoMapper.Attributes</RootNamespace>
 	<PackageId>AutoMapper.Attributes</PackageId>
 	<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-	<SignAssembly>True</SignAssembly>
+	<SignAssembly>false</SignAssembly>
 	<AssemblyOriginatorKeyFile>AutoMapper.Attributes.snk</AssemblyOriginatorKeyFile>
 	<Authors>Spencer Schneidenbach</Authors>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -16,9 +16,13 @@
 	<PackageLicenseUrl>https://github.com/schneidenbach/AutoMapper.Attributes/blob/master/LICENSE</PackageLicenseUrl>
 	<RepositoryUrl>https://github.com/schneidenbach/AutoMapper.Attributes</RepositoryUrl>
 	<PackageTags>AutoMapper, AutoMapper.Attributes</PackageTags>
-	<AssemblyVersion>6.0.0.0</AssemblyVersion>
-	<FileVersion>6.0.0.0</FileVersion>
-	<Version>6.0.0</Version>
+	<AssemblyVersion>6.0.1.0</AssemblyVersion>
+	<FileVersion>6.0.1.0</FileVersion>
+	<Version>6.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.3|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.3\AutoMapper.Attributes.xml</DocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
