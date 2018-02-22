@@ -1,5 +1,5 @@
 # AutoMapper.Attributes
-A convenient way to create AutoMapper type mappings using attributes.
+A convenient way to create AutoMapper type mappings using attributes.  **Note that this library is no longer being maintained - please [read this blog post](https://medium.com/@schneidenbach/lessons-learned-from-dabbling-in-open-source-4ac654b1580e) for context.**
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fkedmn5vx1j9ne5x?svg=true)](https://ci.appveyor.com/project/schneidsDotNet/automapper-attributes)  [![Nuget](https://img.shields.io/nuget/v/Automapper.Attributes.svg)](https://www.nuget.org/packages/AutoMapper.Attributes/)
 
