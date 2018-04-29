@@ -21,8 +21,8 @@ namespace AutoMapper.Attributes
                 assemblyTypes.Select(t => new
                 {
                     Type = t,
-                    MapsToAttributes = t.GetCustomAttributes(typeof(MapsToAttribute), true).Cast<MapsToAttribute>(),
-                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), true).Cast<MapsFromAttribute>(),
+                    MapsToAttributes = t.GetCustomAttributes(typeof(MapsToAttribute), false).Cast<MapsToAttribute>(),
+                    MapsFromAttributes = t.GetCustomAttributes(typeof(MapsFromAttribute), false).Cast<MapsFromAttribute>(),
                 })
                 .Where(t => t.MapsToAttributes.Any() || t.MapsFromAttributes.Any());
             
