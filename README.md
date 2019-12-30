@@ -1,5 +1,9 @@
+# AutoMapper now supports attributes natively. Don't use this library. More documentation here: https://docs.automapper.org/en/stable/Attribute-mapping.html
+
+I also wrote about my experience writing this library [here](https://medium.com/@schneidenbach/lessons-learned-from-dabbling-in-open-source-4ac654b1580e).
+
 # AutoMapper.Attributes
-A convenient way to create AutoMapper type mappings using attributes.  **Note that this library is no longer being maintained - please [read this blog post](https://medium.com/@schneidenbach/lessons-learned-from-dabbling-in-open-source-4ac654b1580e) for context.**
+A convenient way to create AutoMapper type mappings using attributes.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fkedmn5vx1j9ne5x?svg=true)](https://ci.appveyor.com/project/schneidsDotNet/automapper-attributes)  [![Nuget](https://img.shields.io/nuget/v/Automapper.Attributes.svg)](https://www.nuget.org/packages/AutoMapper.Attributes/)
 
