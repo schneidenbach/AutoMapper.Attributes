@@ -18,7 +18,12 @@ namespace AutoMapper.Attributes
         /// If true, mapping will be configured in reverse as well.
         /// </summary>
         public bool ReverseMap { get; set; }
-        
+
+        /// <summary>
+        /// Specify the member list to validate against during configuration validation. Default <see cref="MemberList.Destination"/>.
+        /// </summary>
+        public MemberList MemberList { get; set; } = MemberList.Destination;
+
         /// <summary>
         /// Allows configuration of the mapping after mapping is done. Meant to be 
         /// </summary>
